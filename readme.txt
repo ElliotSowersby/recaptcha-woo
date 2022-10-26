@@ -4,7 +4,7 @@ Tags: recaptcha,woocommerce,checkout,spam,protect
 Donate link: https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS
 Requires at least: 4.7
 Tested up to: 6.0.2
-Stable Tag: 1.1.4
+Stable Tag: 1.2.0
 License: GPLv3 or later.
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -60,7 +60,7 @@ Yes, this plugin is completely free with no paid version, and it doesn't track y
 
 == Changelog ==
 
-= Version 1.2.0 - 26th October 2022 =
+= Version 1.2.0 - 27th October 2022 =
 - New: Added options to enable reCAPTCHA on the WP Login and WP Register page (wp-login.php).
 - New: Added a new "Test API Response" step to the settings page, whenever the API keys are updated to make sure it's working. reCAPTCHA will not work on your WP login form until the test is successfully complete.
 - Tweak: A few small changes to the admin settings page.
