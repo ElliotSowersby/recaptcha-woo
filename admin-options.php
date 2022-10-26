@@ -105,7 +105,7 @@ function rcfwc_settings_page() {
   <strong style="color: green;"><?php echo __( '[NEW]', 'recaptcha-woo' ); ?></strong>
   <?php echo __( '<a href="https://www.cloudflare.com/en-gb/products/turnstile/" target="_blank">Cloudflare Turnstile</a> is a new user-friendly, privacy-preserving, reCAPTCHA alternative!', 'recaptcha-woo' ); ?>
   <br/>
-  <?php echo __( 'Switch to this now with our new 100% free plugin:', 'recaptcha-woo' ); ?> <a href="<?php echo get_admin_url(); ?>plugin-install.php?s=Simple%20Cloudflare%20Turnstile%20RelyWP&tab=search&type=term" target="_blank">Simple Cloudflare Turnstile<span class="dashicons dashicons-external" style="height: 15px; font-size: 15px; margin-top: 2px; text-decoration: none;"></span></a>
+  <?php echo __( 'You can switch to this now with our new 100% free plugin:', 'recaptcha-woo' ); ?> <a href="<?php echo get_admin_url(); ?>plugin-install.php?s=Simple%20Cloudflare%20Turnstile%20RelyWP&tab=search&type=term" target="_blank">Simple Cloudflare Turnstile<span class="dashicons dashicons-external" style="height: 15px; font-size: 15px; margin-top: 2px; text-decoration: none;"></span></a>
 </p>
 
 <br/><br/>
@@ -118,7 +118,7 @@ function rcfwc_settings_page() {
 if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 	echo rcfwc_admin_test();
 } else {
-	echo '<p style="font-weight: bold; color: green;"><span class="dashicons dashicons-yes-alt"></span> ' . __( 'Success! Turnstile seems to be working correctly with your API keys.', 'simple-cloudflare-turnstile' ) . '</p>';
+	echo '<p style="font-weight: bold; color: green;"><span class="dashicons dashicons-yes-alt"></span> ' . __( 'Success! reCAPTCHA seems to be working correctly with your API keys.', 'simple-cloudflare-turnstile' ) . '</p>';
 } ?>
 
 <form method="post" action="options.php">
