@@ -47,6 +47,10 @@ The language for the WooCommerce reCAPTCHA will be automatically set based on yo
 
 Yes, this plugin is completely free with no paid version, and it doesn't track your data. Google reCAPTCHA is also a completely free service!
 
+## Alternative Plugin ##
+
+Want a user-friendly, privacy-preserving reCAPTCHA alternative? Check out the <a href="https://wordpress.org/plugins/simple-cloudflare-turnstile/">Simple Cloudflare Turnstile</a> plugin instead (100% free).
+
 == Installation ==
 
 1. Upload 'recaptcha-woo' to the '/wp-content/plugins/' directory.
