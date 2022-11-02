@@ -16,17 +16,17 @@ function rcfwc_create_menu() {
 
 // Register Settings
 function register_rcfwc_settings() {
-	register_setting( 'rcfwc-settings-group', 'rcfwc_key' );
-	register_setting( 'rcfwc-settings-group', 'rcfwc_secret' );
-	register_setting( 'rcfwc-settings-group', 'rcfwc_theme' );
+  register_setting( 'rcfwc-settings-group', 'rcfwc_key' );
+  register_setting( 'rcfwc-settings-group', 'rcfwc_secret' );
+  register_setting( 'rcfwc-settings-group', 'rcfwc_theme' );
   register_setting( 'rcfwc-settings-group', 'rcfwc_login' );
   register_setting( 'rcfwc-settings-group', 'rcfwc_register' );
   register_setting( 'rcfwc-settings-group', 'rcfwc_reset' );
-	register_setting( 'rcfwc-settings-group', 'rcfwc_woo_checkout' );
-	register_setting( 'rcfwc-settings-group', 'rcfwc_guest_only' );
-	register_setting( 'rcfwc-settings-group', 'rcfwc_woo_login' );
-	register_setting( 'rcfwc-settings-group', 'rcfwc_woo_register' );
-	register_setting( 'rcfwc-settings-group', 'rcfwc_woo_reset' );
+  register_setting( 'rcfwc-settings-group', 'rcfwc_woo_checkout' );
+  register_setting( 'rcfwc-settings-group', 'rcfwc_guest_only' );
+  register_setting( 'rcfwc-settings-group', 'rcfwc_woo_login' );
+  register_setting( 'rcfwc-settings-group', 'rcfwc_woo_register' );
+  register_setting( 'rcfwc-settings-group', 'rcfwc_woo_reset' );
 }
 
 // Keys Updated
@@ -74,11 +74,11 @@ function rcfwc_admin_test() {
 				if($error == "missing-input-response") {
 					echo '<p style="font-weight: bold; color: red;">' . esc_html__( 'Please verify that you are human.', 'recaptcha-woo' ) . '</p>';
 				} else {
-					echo '<p style="font-weight: bold; color: red;">' . esc_html__( 'Failed! There is an error with your API settings. Please check & update them.', 'recaptcha-woo' ) . '</p>';
+					echo '<p style="font-weight: bold; color: red;">' . esc_html__( 'Failed! There is an error with your API settings. Please check & update them.', 'recaptcha-woo' ) . '<br/>' . esc_html__( 'Error Code:', 'recaptcha-woo' ) . ' ' . $error . '</p>';
 				}
 			}
 			if($error) {
-				echo '<p style="font-weight: bold;">' . esc_html__( 'Error message:', 'recaptcha-woo' ) . " " . rcfwc_error_message($error) . '</p>';
+				echo '<p style="font-weight: bold;">' . esc_html__( 'Error Message:', 'recaptcha-woo' ) . " " . esc_html__( 'Please verify that you are human.', 'recaptcha-woo' ) . '</p>';
 			}
 		}
 		if($success != true) {

@@ -1,10 +1,11 @@
+
 === reCAPTCHA for WooCommerce ===
 Contributors: ElliotVS, RelyWP
 Tags: recaptcha,woocommerce,checkout,spam,protect
 Donate link: https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS
 Requires at least: 4.7
-Tested up to: 6.0.2
-Stable Tag: 1.2.0
+Tested up to: 6.1.0
+Stable Tag: 1.2.1
 License: GPLv3 or later.
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -63,6 +64,10 @@ Want a user-friendly, privacy-preserving reCAPTCHA alternative? Check out the <a
 2. Example reCAPTCHA on the Checkout Page
 
 == Changelog ==
+
+= Version 1.2.1 - 2nd November 2022 =
+- Fix: Fixed bug on admin settings page.
+- Other: Tested with WordPress 6.1.0
 
 = Version 1.2.0 - 27th October 2022 =
 - New: Added options to enable reCAPTCHA on the WP Login and WP Register page (wp-login.php).
