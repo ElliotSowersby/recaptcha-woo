@@ -2,14 +2,14 @@
 /**
 * Plugin Name: reCAPTCHA for WooCommerce
 * Description: Add Google reCAPTCHA to your WooCommerce Checkout, Login, and Registration Forms.
-* Version: 1.2.2
+* Version: 1.2.3
 * Author: Elliot Sowersby, RelyWP
 * Author URI: https://www.relywp.com
 * License: GPLv3 or later
 * Text Domain: recaptcha-woo
 *
 * WC requires at least: 3.4
-* WC tested up to: 7.0.0
+* WC tested up to: 7.1.0
 **/
 
 include( plugin_dir_path( __FILE__ ) . 'admin-options.php');
@@ -53,9 +53,11 @@ function rcfwc_script_enqueue() {
 }
 add_action("wp_enqueue_scripts", "rcfwc_script");
 function rcfwc_script() {
-	if ( is_checkout() || is_account_page() ) {
-		 rcfwc_script_enqueue();
-	}
+  if ( class_exists( 'WooCommerce' ) ) {
+  	if ( is_checkout() || is_account_page() ) {
+  		 rcfwc_script_enqueue();
+  	}
+  }
 }
 // Enqueue recaptcha script on login
 add_action("login_enqueue_scripts", "rcfwc_script_login");
@@ -195,66 +197,70 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
 	  }
 	}
 
-	// Woo Checkout
-	if( get_option('rcfwc_key') && ( empty(get_option('rcfwc_woo_checkout')) || get_option('rcfwc_woo_checkout') ) ) {
-		add_action('woocommerce_review_order_before_payment', 'rcfwc_field_checkout', 10);
-		add_action('woocommerce_checkout_process', 'rcfwc_checkout_check');
-		function rcfwc_checkout_check() {
-			$guest = esc_attr( get_option('rcfwc_guest_only') );
-			if( !$guest || ( $guest && !is_user_logged_in() ) ) {
-				$check = rcfwc_recaptcha_check();
-				$success = $check['success'];
-				if($success != true) {
-					wc_add_notice( __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ), 'error');
-				}
-			}
-		}
-	}
+  if ( class_exists( 'WooCommerce' ) ) {
 
-	// Woo Login
-	if(get_option('rcfwc_woo_login')) {
-		add_action('woocommerce_login_form','rcfwc_field');
-		add_action('wp_authenticate_user', 'rcfwc_woo_login_check', 10, 1);
-		function rcfwc_woo_login_check($user){
-			if(isset($_POST['woocommerce-login-nonce'])) {
-				$check = rcfwc_recaptcha_check();
-				$success = $check['success'];
-				if($success != true) {
-					$user = new WP_Error( 'authentication_failed', __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ) );
-				}
-			}
-			return $user;
-		}
-	}
+  	// Woo Checkout
+  	if( get_option('rcfwc_key') && ( empty(get_option('rcfwc_woo_checkout')) || get_option('rcfwc_woo_checkout') ) ) {
+  		add_action('woocommerce_review_order_before_payment', 'rcfwc_field_checkout', 10);
+  		add_action('woocommerce_checkout_process', 'rcfwc_checkout_check');
+  		function rcfwc_checkout_check() {
+  			$guest = esc_attr( get_option('rcfwc_guest_only') );
+  			if( !$guest || ( $guest && !is_user_logged_in() ) ) {
+  				$check = rcfwc_recaptcha_check();
+  				$success = $check['success'];
+  				if($success != true) {
+  					wc_add_notice( __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ), 'error');
+  				}
+  			}
+  		}
+  	}
 
-	// Woo Register
-	if(get_option('rcfwc_woo_register')) {
-		add_action('woocommerce_register_form','rcfwc_field');
-		add_action('woocommerce_register_post', 'rcfwc_woo_register_check', 10, 3);
-		function rcfwc_woo_register_check($username, $email, $validation_errors) {
-			if(!is_checkout()) {
-				$check = rcfwc_recaptcha_check();
-				$success = $check['success'];
-				if($success != true) {
-					$validation_errors->add( 'rcfwc_error', __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ) );
-				}
-			}
-		}
-	}
+  	// Woo Login
+  	if(get_option('rcfwc_woo_login')) {
+  		add_action('woocommerce_login_form','rcfwc_field');
+  		add_action('wp_authenticate_user', 'rcfwc_woo_login_check', 10, 1);
+  		function rcfwc_woo_login_check($user){
+  			if(isset($_POST['woocommerce-login-nonce'])) {
+  				$check = rcfwc_recaptcha_check();
+  				$success = $check['success'];
+  				if($success != true) {
+  					$user = new WP_Error( 'authentication_failed', __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ) );
+  				}
+  			}
+  			return $user;
+  		}
+  	}
 
-	// Woo Reset
-	if(get_option('rcfwc_woo_reset')) {
-		add_action('woocommerce_lostpassword_form','rcfwc_field');
-		add_action('lostpassword_post','rcfwc_woo_reset_check', 10, 1);
-		function rcfwc_woo_reset_check($validation_errors) {
-			if(isset($_POST['woocommerce-lost-password-nonce'])) {
-				$check = rcfwc_recaptcha_check();
-				$success = $check['success'];
-				if($success != true) {
-					$validation_errors->add( 'rcfwc_error', __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ) );
-				}
-			}
-		}
-	}
+  	// Woo Register
+  	if(get_option('rcfwc_woo_register')) {
+  		add_action('woocommerce_register_form','rcfwc_field');
+  		add_action('woocommerce_register_post', 'rcfwc_woo_register_check', 10, 3);
+  		function rcfwc_woo_register_check($username, $email, $validation_errors) {
+  			if(!is_checkout()) {
+  				$check = rcfwc_recaptcha_check();
+  				$success = $check['success'];
+  				if($success != true) {
+  					$validation_errors->add( 'rcfwc_error', __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ) );
+  				}
+  			}
+  		}
+  	}
+
+  	// Woo Reset
+  	if(get_option('rcfwc_woo_reset')) {
+  		add_action('woocommerce_lostpassword_form','rcfwc_field');
+  		add_action('lostpassword_post','rcfwc_woo_reset_check', 10, 1);
+  		function rcfwc_woo_reset_check($validation_errors) {
+  			if(isset($_POST['woocommerce-lost-password-nonce'])) {
+  				$check = rcfwc_recaptcha_check();
+  				$success = $check['success'];
+  				if($success != true) {
+  					$validation_errors->add( 'rcfwc_error', __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ) );
+  				}
+  			}
+  		}
+  	}
+
+  }
 
 }
