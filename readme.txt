@@ -4,8 +4,8 @@ Contributors: ElliotVS, RelyWP
 Tags: recaptcha,woocommerce,checkout,spam,protect
 Donate link: https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS
 Requires at least: 4.7
-Tested up to: 6.1
-Stable Tag: 1.2.3
+Tested up to: 6.1.1
+Stable Tag: 1.2.4
 License: GPLv3 or later.
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -64,6 +64,12 @@ Want a user-friendly, privacy-preserving reCAPTCHA alternative? Check out the <a
 2. Example reCAPTCHA on the Checkout Page
 
 == Changelog ==
+
+= Version 1.2.4 - 16th November 2022 =
+- Fix: Fixed issue with reCAPTCHA sometimes no longer showing on checkout.
+- Fix: Fixed redirect to settings page on activate.
+- Other: Tested with WordPress 6.1.1
+- Other: Tested with WooCommerce 7.1.0
 
 = Version 1.2.3 - 12th November 2022 =
 - Fix: Added check to see if WooCommerce is activated and not display error if it is not.

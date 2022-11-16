@@ -2,7 +2,7 @@
 /**
 * Plugin Name: reCAPTCHA for WooCommerce
 * Description: Add Google reCAPTCHA to your WooCommerce Checkout, Login, and Registration Forms.
-* Version: 1.2.3
+* Version: 1.2.4
 * Author: Elliot Sowersby, RelyWP
 * Author URI: https://www.relywp.com
 * License: GPLv3 or later
@@ -24,7 +24,7 @@ register_activation_hook(__FILE__, function () {
 add_action('admin_init', function () {
   if (get_option('rcfwc_do_activation_redirect', false)) {
     delete_option('rcfwc_do_activation_redirect');
-    exit( wp_redirect("wp-admin/options-general.php?page=recaptcha-woo%2Fadmin-options.php") );
+    exit( wp_redirect("options-general.php?page=recaptcha-woo%2Fadmin-options.php") );
   }
 });
 
@@ -53,7 +53,7 @@ function rcfwc_script_enqueue() {
 }
 add_action("wp_enqueue_scripts", "rcfwc_script");
 function rcfwc_script() {
-  if ( class_exists( 'WooCommerce' ) ) {
+  if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
   	if ( is_checkout() || is_account_page() ) {
   		 rcfwc_script_enqueue();
   	}
@@ -197,7 +197,7 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
 	  }
 	}
 
-  if ( class_exists( 'WooCommerce' ) ) {
+  if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 
   	// Woo Checkout
   	if( get_option('rcfwc_key') && ( empty(get_option('rcfwc_woo_checkout')) || get_option('rcfwc_woo_checkout') ) ) {
