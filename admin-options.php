@@ -101,7 +101,7 @@ function rcfwc_settings_page() {
 ?>
 <div class="wrap">
 
-<p style="font-size: 12px; background: #fff; padding: 10px; display: inline-block; border: 1px solid #333; border-radius: 4px; margin-bottom: 0;">
+<p style="font-size: 14px; background: #fff; padding: 10px; display: inline-block; border: 1px solid #333; border-radius: 4px; margin-bottom: 0;">
   <strong style="color: green;"><?php echo __( '[NEW]', 'recaptcha-woo' ); ?></strong>
   <?php echo __( '<a href="https://www.cloudflare.com/en-gb/products/turnstile/" target="_blank">Cloudflare Turnstile</a> is a new user-friendly, privacy-preserving, reCAPTCHA alternative!', 'recaptcha-woo' ); ?>
   <br/>
@@ -203,7 +203,7 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 				<?php echo __( 'Guest Checkout Only', 'recaptcha-woo' ); ?>
 			</th>
 			<td>
-				<input type="checkbox" name="rcfwc_woo_checkout" <?php if(empty(get_option('rcfwc_woo_checkout')) || get_option('rcfwc_woo_checkout')) { ?>checked<?php } ?>>
+				<input type="checkbox" name="rcfwc_woo_checkout" <?php if(get_option('rcfwc_woo_checkout')) { ?>checked<?php } ?>>
 				<br/><br/>
 				<input type="checkbox" name="rcfwc_guest_only" <?php if(get_option('rcfwc_guest_only')) { ?>checked<?php } ?>>
 			</td>
@@ -231,17 +231,19 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 
     <p style="font-size: 15px; font-weight: bold;"><?php echo __( '100% free plugin developed by', 'recaptcha-woo' ); ?> <a href="https://twitter.com/ElliotVS" target="_blank" title="@ElliotVS on Twitter">Elliot Sowersby</a> (<a href="https://www.relywp.com/?utm_source=sct" target="_blank" title="RelyWP - WordPress Maintenance & Support">RelyWP</a>) 🙌</p>
 
-    <p style="font-size: 15px;"><?php echo __( 'Find this plugin useful?', 'recaptcha-woo' ); ?> <a href="https://wordpress.org/support/plugin/recaptcha-woo/reviews/#new-post" target="_blank"><?php echo __( 'Please submit a review', 'recaptcha-woo' ); ?></a> <a href="https://wordpress.org/support/plugin/recaptcha-woo/reviews/#new-post" target="_blank" style="text-decoration: none;">⭐️⭐️⭐️⭐️⭐️</a></p>
+    <p style="font-size: 15px;">- <?php echo __( 'Find this plugin useful?', 'recaptcha-woo' ); ?> <a href="https://wordpress.org/support/plugin/recaptcha-woo/reviews/#new-post" target="_blank"><?php echo __( 'Please submit a review', 'recaptcha-woo' ); ?></a> <a href="https://wordpress.org/support/plugin/recaptcha-woo/reviews/#new-post" target="_blank" style="text-decoration: none;">⭐️⭐️⭐️⭐️⭐️</a></p>
 
-    <p style="font-size: 15px;"><?php echo __( 'Need help? Have a suggestion?', 'recaptcha-woo' ); ?> <a href="https://wordpress.org/support/plugin/recaptcha-woo" target="_blank"><?php echo __( 'Create a support topic', 'recaptcha-woo' ); ?><span class="dashicons dashicons-external" style="font-size: 15px; margin-top: 5px; text-decoration: none;"></span></a></p>
+    <p style="font-size: 15px;">- <?php echo __( 'Need help? Have a suggestion?', 'recaptcha-woo' ); ?> <a href="https://wordpress.org/support/plugin/recaptcha-woo" target="_blank"><?php echo __( 'Create a support topic', 'recaptcha-woo' ); ?><span class="dashicons dashicons-external" style="font-size: 15px; margin-top: 5px; text-decoration: none;"></span></a></p>
+
+	<p style="font-size: 15px;">- <?php echo __( 'Want to support the developer?', 'simple-cloudflare-turnstile' ); ?> <?php echo __( 'Feel free to', 'simple-cloudflare-turnstile' ); ?> <a href="https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS" target="_blank"><?php echo __( 'Donate', 'simple-cloudflare-turnstile' ); ?><span class="dashicons dashicons-external" style="font-size: 15px; margin-top: 5px; text-decoration: none;"></span></a></p>
 
     <br/>
 
     <p style="font-size: 12px;">
-      <a href="https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS" target="_blank"><?php echo __( 'Donate via PayPal', 'recaptcha-woo' ); ?><span class="dashicons dashicons-external" style="font-size: 15px; margin-top: 2px; text-decoration: none;"></span></a>
-      <br/>
-      <a href="https://translate.wordpress.org/projects/wp-plugins/recaptcha-woo/" target="_blank"><?php echo __( 'Translate into your language', 'recaptcha-woo' ); ?><span class="dashicons dashicons-external" style="font-size: 15px; margin-top: 2px; text-decoration: none;"></span></a>
-    </p>
+		<a href="https://translate.wordpress.org/projects/wp-plugins/recaptcha-woo/" target="_blank"><?php echo __( 'Translate into your language', 'recaptcha-woo' ); ?><span class="dashicons dashicons-external" style="font-size: 15px; margin-top: 2px; text-decoration: none;"></span></a>
+		<br/>
+		<a href="https://github.com/elliotvs/recaptcha-woo" target="_blank"><?php echo __( 'View on GitHub', 'simple-cloudflare-turnstile' ); ?><span class="dashicons dashicons-external" style="font-size: 15px; margin-top: 2px; text-decoration: none;"></span></a>
+	</p>
 
     </div>
 </form>
