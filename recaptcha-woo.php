@@ -2,7 +2,7 @@
 /**
 * Plugin Name: reCAPTCHA for WooCommerce
 * Description: Add Google reCAPTCHA to your WooCommerce Checkout, Login, and Registration Forms.
-* Version: 1.2.5
+* Version: 1.2.6
 * Author: Elliot Sowersby, RelyWP
 * Author URI: https://www.relywp.com
 * License: GPLv3 or later
@@ -200,7 +200,7 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
   if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 
   	// Woo Checkout
-  	if( get_option('rcfwc_key') && ( empty(get_option('rcfwc_woo_checkout')) || get_option('rcfwc_woo_checkout') ) ) {
+  	if( get_option('rcfwc_key') && get_option('rcfwc_woo_checkout') ) {
   		add_action('woocommerce_review_order_before_payment', 'rcfwc_field_checkout', 10);
   		add_action('woocommerce_checkout_process', 'rcfwc_checkout_check');
   		function rcfwc_checkout_check() {
