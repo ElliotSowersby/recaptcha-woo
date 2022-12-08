@@ -51,7 +51,7 @@ function rcfwc_admin_test() {
 	<form action="" method="POST">
 	<?php
 	if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
-		$check = rcfwc_recaptcha_check(true);
+		$check = rcfwc_recaptcha_check();
 		$success = '';
 		$error = '';
 		if(isset($check['success'])) $success = $check['success'];

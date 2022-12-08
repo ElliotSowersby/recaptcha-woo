@@ -64,6 +64,9 @@ Want a user-friendly, privacy-preserving reCAPTCHA alternative? Check out the <a
 
 == Changelog ==
 
+= Version 1.2.8 - 8th December 2022 =
+- Tweak: Update to the code changes made in 1.2.7.
+
 = Version 1.2.7 - 8th December 2022 =
 - Fix: Fixed issue with some websites not being able to complete the "Test API Response" step in settings.
 - Other: Tested with WooCommerce 7.1.1

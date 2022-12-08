@@ -2,7 +2,7 @@
 /**
 * Plugin Name: reCAPTCHA for WooCommerce
 * Description: Add Google reCAPTCHA to your WooCommerce Checkout, Login, and Registration Forms.
-* Version: 1.2.7
+* Version: 1.2.8
 * Author: Elliot Sowersby, RelyWP
 * Author URI: https://www.relywp.com
 * License: GPLv3 or later
@@ -108,7 +108,7 @@ function rcfwc_field_checkout($checkout) {
 }
 
 // Check the reCAPTCHA on submit.
-function rcfwc_recaptcha_check($skip_guest = true) {
+function rcfwc_recaptcha_check() {
 
 	$postdata = "";
 	if(isset($_POST['g-recaptcha-response'])) {
@@ -119,30 +119,27 @@ function rcfwc_recaptcha_check($skip_guest = true) {
 	$secret = esc_attr( get_option('rcfwc_secret') );
 	$guest = esc_attr( get_option('rcfwc_guest_only') );
 
-	if( $skip_guest || !$guest || ( $guest && !is_user_logged_in() ) ) {
+	if($key && $secret) {
 
-		if($key && $secret) {
+		$verify = wp_remote_get( 'https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$postdata );
+		$verify = wp_remote_retrieve_body( $verify );
+		$response = json_decode($verify);
 
-			$verify = wp_remote_get( 'https://www.google.com/recaptcha/api/siteverify?secret='.$secret.'&response='.$postdata );
-			$verify = wp_remote_retrieve_body( $verify );
-			$response = json_decode($verify);
+		$results['success'] = $response->success;
 
-			$results['success'] = $response->success;
-
-			foreach($response as $key => $val){
-				if($key == 'error-codes')
-				foreach($val as $key => $error_val){
-					$results['error_code'] = $error_val;
-				}
+		foreach($response as $key => $val){
+			if($key == 'error-codes')
+			foreach($val as $key => $error_val){
+				$results['error_code'] = $error_val;
 			}
-
-			return $results;
-
-		} else {
-
-			return false;
-
 		}
+
+		return $results;
+
+	} else {
+
+		return false;
+
 	}
 
 }
@@ -156,7 +153,7 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
 			add_action('wp_authenticate_user', 'rcfwc_wp_login_check', 10, 1);
 			function rcfwc_wp_login_check($user){
 				if ( $GLOBALS['pagenow'] === 'wp-login.php' ) {
-					$check = rcfwc_recaptcha_check(true);
+					$check = rcfwc_recaptcha_check();
 					$success = $check['success'];
 					if($success != true) {
 						$user = new WP_Error( 'authentication_failed', __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ) );
@@ -172,7 +169,7 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
 		add_action('register_form','rcfwc_field_admin');
 		add_action('registration_errors', 'rcfwc_wp_register_check', 10, 3);
 		function rcfwc_wp_register_check($errors, $sanitized_user_login, $user_email) {
-			$check = rcfwc_recaptcha_check(true);
+			$check = rcfwc_recaptcha_check();
 			$success = $check['success'];
 			if($success != true) {
 				$errors->add( 'rcfwc_error', sprintf('<strong>%s</strong>: %s',__( 'ERROR', 'recaptcha-woo' ), __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ) ) );
@@ -188,7 +185,7 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
 	  	add_action('lostpassword_post','rcfwc_wp_reset_check', 10, 1);
 	  	function rcfwc_wp_reset_check($validation_errors) {
 	  		if ( $GLOBALS['pagenow'] === 'wp-login.php' ) {
-	  			$check = rcfwc_recaptcha_check(true);
+	  			$check = rcfwc_recaptcha_check();
 	  			$success = $check['success'];
 	  			if($success != true) {
 	  				$validation_errors->add( 'rcfwc_error', __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ) );
@@ -207,7 +204,7 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
   		function rcfwc_checkout_check() {
   			$guest = esc_attr( get_option('rcfwc_guest_only') );
   			if( !$guest || ( $guest && !is_user_logged_in() ) ) {
-  				$check = rcfwc_recaptcha_check(false);
+  				$check = rcfwc_recaptcha_check();
   				$success = $check['success'];
   				if($success != true) {
   					wc_add_notice( __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ), 'error');
@@ -222,7 +219,7 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
   		add_action('wp_authenticate_user', 'rcfwc_woo_login_check', 10, 1);
   		function rcfwc_woo_login_check($user){
   			if(isset($_POST['woocommerce-login-nonce'])) {
-  				$check = rcfwc_recaptcha_check(true);
+  				$check = rcfwc_recaptcha_check();
   				$success = $check['success'];
   				if($success != true) {
   					$user = new WP_Error( 'authentication_failed', __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ) );
@@ -238,7 +235,7 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
   		add_action('woocommerce_register_post', 'rcfwc_woo_register_check', 10, 3);
   		function rcfwc_woo_register_check($username, $email, $validation_errors) {
   			if(!is_checkout()) {
-  				$check = rcfwc_recaptcha_check(true);
+  				$check = rcfwc_recaptcha_check();
   				$success = $check['success'];
   				if($success != true) {
   					$validation_errors->add( 'rcfwc_error', __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ) );
@@ -253,7 +250,7 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
   		add_action('lostpassword_post','rcfwc_woo_reset_check', 10, 1);
   		function rcfwc_woo_reset_check($validation_errors) {
   			if(isset($_POST['woocommerce-lost-password-nonce'])) {
-  				$check = rcfwc_recaptcha_check(true);
+  				$check = rcfwc_recaptcha_check();
   				$success = $check['success'];
   				if($success != true) {
   					$validation_errors->add( 'rcfwc_error', __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ) );
