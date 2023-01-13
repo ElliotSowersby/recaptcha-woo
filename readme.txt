@@ -64,7 +64,7 @@ Want a user-friendly, privacy-preserving reCAPTCHA alternative? Check out the <a
 
 == Changelog ==
 
-= Version 1.2.9 - 12th December 2022 =
+= Version 1.2.9 - 12th January 2023 =
 - Tweak: reCAPTCHA on WordPress login will now work better with plugins that hide/change the admin login URL.
 - Tweak: WordPress Login and Register will skip Turnstile check for XMLRPC requests.
 - Tweak: reCAPTCHA will now re-render properly when there is an error on the checkout page.
