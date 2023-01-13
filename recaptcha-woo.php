@@ -2,7 +2,7 @@
 /**
 * Plugin Name: reCAPTCHA for WooCommerce
 * Description: Add Google reCAPTCHA to your WooCommerce Checkout, Login, and Registration Forms.
-* Version: 1.2.8
+* Version: 1.2.9
 * Author: Elliot Sowersby, RelyWP
 * Author URI: https://www.relywp.com
 * License: GPLv3 or later
@@ -148,11 +148,12 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
 
 	// WP Login Check
 	if(get_option('rcfwc_login')) {
-		if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') == 'yes') {
+		if(get_option('rcfwc_tested') == 'yes') {
 			add_action('login_form','rcfwc_field_admin');
-			add_action('wp_authenticate_user', 'rcfwc_wp_login_check', 10, 1);
+			add_action('authenticate', 'rcfwc_wp_login_check', 21, 1);
 			function rcfwc_wp_login_check($user){
-				if ( $GLOBALS['pagenow'] === 'wp-login.php' ) {
+				if(is_wp_error($user) && isset($user->errors['empty_username']) && isset($user->errors['empty_password'])) {	return $user; } // Skip Errors
+				if(stripos($_SERVER["REQUEST_URI"], strrchr(wp_login_url(), '/')) !== false) { // Check if WP login page
 					$check = rcfwc_recaptcha_check();
 					$success = $check['success'];
 					if($success != true) {
@@ -169,6 +170,7 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
 		add_action('register_form','rcfwc_field_admin');
 		add_action('registration_errors', 'rcfwc_wp_register_check', 10, 3);
 		function rcfwc_wp_register_check($errors, $sanitized_user_login, $user_email) {
+			if(defined( 'XMLRPC_REQUEST')) { return $errors; } // Skip XMLRPC
 			$check = rcfwc_recaptcha_check();
 			$success = $check['success'];
 			if($success != true) {
@@ -184,7 +186,7 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
 	  	add_action('lostpassword_form','rcfwc_field_admin');
 	  	add_action('lostpassword_post','rcfwc_wp_reset_check', 10, 1);
 	  	function rcfwc_wp_reset_check($validation_errors) {
-	  		if ( $GLOBALS['pagenow'] === 'wp-login.php' ) {
+			if(stripos($_SERVER["REQUEST_URI"], strrchr(wp_login_url(), '/')) !== false) { // Check if WP login page
 	  			$check = rcfwc_recaptcha_check();
 	  			$success = $check['success'];
 	  			if($success != true) {
