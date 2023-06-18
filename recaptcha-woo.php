@@ -2,14 +2,14 @@
 /**
 * Plugin Name: reCAPTCHA for WooCommerce
 * Description: Add Google reCAPTCHA to your WooCommerce Checkout, Login, and Registration Forms.
-* Version: 1.2.9
+* Version: 1.3.0
 * Author: Elliot Sowersby, RelyWP
 * Author URI: https://www.relywp.com
 * License: GPLv3 or later
 * Text Domain: recaptcha-woo
 *
 * WC requires at least: 3.4
-* WC tested up to: 7.1.1
+* WC tested up to: 7.8.0
 **/
 
 include( plugin_dir_path( __FILE__ ) . 'admin-options.php');
@@ -97,6 +97,9 @@ function rcfwc_field_checkout($checkout) {
 	$secret = esc_attr( get_option('rcfwc_secret') );
 	$theme = esc_attr( get_option('rcfwc_theme') );
 	$guest = esc_attr( get_option('rcfwc_guest_only') );
+	if(get_option('rcfwc_woo_checkout_pos') == "afterpay") {
+		echo "<br/>";
+	}
 	if( !$guest || ( $guest && !is_user_logged_in() ) ) {
 		if($key && $secret) {
 		?>
@@ -152,17 +155,44 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
 			add_action('login_form','rcfwc_field_admin');
 			add_action('authenticate', 'rcfwc_wp_login_check', 21, 1);
 			function rcfwc_wp_login_check($user){
-				if(is_wp_error($user) && isset($user->errors['empty_username']) && isset($user->errors['empty_password'])) {	return $user; } // Skip Errors
+
+				// Start session
+				if (!session_id()) { session_start(); }
+
+				// Only run if $user exists
+				if(!isset($user->ID)) { return $user; }
+
+				// Check skip
+				if(defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST) { return $user; } // Skip XMLRPC
+				if(defined( 'REST_REQUEST' ) && REST_REQUEST) { return $user; } // Skip REST API
+				if(isset($_POST['woocommerce-login-nonce']) && wp_verify_nonce(sanitize_text_field($_POST['woocommerce-login-nonce']), 'woocommerce-login')) { return $user; } // Skip Woo
+				if(is_wp_error($user) && isset($user->errors['empty_username']) && isset($user->errors['empty_password']) ) {return $user; } // Skip Errors
+
+				// Check if already validated
+				if(isset($_SESSION['rcfwc_login_checked']) && wp_verify_nonce( sanitize_text_field($_SESSION['rcfwc_login_checked']), 'rcfwc_login_check' )) {
+					return $user;
+				}
+
 				if(stripos($_SERVER["REQUEST_URI"], strrchr(wp_login_url(), '/')) !== false) { // Check if WP login page
 					$check = rcfwc_recaptcha_check();
 					$success = $check['success'];
 					if($success != true) {
 						$user = new WP_Error( 'authentication_failed', __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ) );
+					} else {
+						$nonce = wp_create_nonce( 'rcfwc_login_check' );
+						$_SESSION['rcfwc_login_checked'] = $nonce;
 					}
 				}
+
 				return $user;
+
 			}
 		}
+	}
+	// Clear session on login
+	add_action('wp_login', 'rcfwc_wp_login_clear', 10, 2);
+	function rcfwc_wp_login_clear($user_login, $user) {
+		if(isset($_SESSION['rcfwc_login_checked'])) { unset($_SESSION['rcfwc_login_checked']); }
 	}
 
 	// WP Register Check
@@ -201,11 +231,36 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
 
   	// Woo Checkout
   	if( get_option('rcfwc_key') && get_option('rcfwc_woo_checkout') ) {
-  		add_action('woocommerce_review_order_before_payment', 'rcfwc_field_checkout', 10);
+		if(empty(get_option('rcfwc_woo_checkout_pos')) || get_option('rcfwc_woo_checkout_pos') == "beforepay") {
+			add_action('woocommerce_review_order_before_payment', 'rcfwc_field_checkout', 10);
+		} elseif(get_option('rcfwc_woo_checkout_pos') == "afterpay") {
+			add_action('woocommerce_review_order_after_payment', 'rcfwc_field_checkout', 10);
+		} elseif(get_option('rcfwc_woo_checkout_pos') == "beforebilling") {
+			add_action('woocommerce_before_checkout_billing_form', 'rcfwc_field_checkout', 10);
+		} elseif(get_option('rcfwc_woo_checkout_pos') == "afterbilling") {
+			add_action('woocommerce_after_checkout_billing_form', 'rcfwc_field_checkout', 10);
+		} elseif(get_option('rcfwc_woo_checkout_pos') == "beforesubmit") {
+			add_action('woocommerce_review_order_before_submit', 'rcfwc_field_checkout', 10);
+		}
   		add_action('woocommerce_checkout_process', 'rcfwc_checkout_check');
   		function rcfwc_checkout_check() {
+			// Skip if reCAPTCHA disabled for payment method
+			$skip = 0;
+			if ( isset( $_POST['payment_method'] ) ) {
+				$chosen_payment_method = sanitize_text_field( $_POST['payment_method'] );
+				// Retrieve the selected payment methods from the rcfwc_selected_payment_methods option
+				$selected_payment_methods = get_option('rcfwc_selected_payment_methods', array());
+				if(is_array($selected_payment_methods)) {
+					// Check if the chosen payment method is in the selected payment methods array
+					if ( in_array( $chosen_payment_method, $selected_payment_methods, true ) ) {
+						$skip = 1;
+					}
+				}
+			}
+			// Check if guest only enabled
   			$guest = esc_attr( get_option('rcfwc_guest_only') );
-  			if( !$guest || ( $guest && !is_user_logged_in() ) ) {
+			// Check
+  			if( !$skip && (!$guest || ( $guest && !is_user_logged_in() )) ) {
   				$check = rcfwc_recaptcha_check();
   				$success = $check['success'];
   				if($success != true) {
@@ -218,8 +273,10 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
   	// Woo Login
   	if(get_option('rcfwc_woo_login')) {
   		add_action('woocommerce_login_form','rcfwc_field');
-  		add_action('wp_authenticate_user', 'rcfwc_woo_login_check', 10, 1);
+  		add_action('authenticate', 'rcfwc_woo_login_check', 21, 1);
   		function rcfwc_woo_login_check($user){
+			if(defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST) { return $user; } // Skip XMLRPC
+			if(defined( 'REST_REQUEST' ) && REST_REQUEST) { return $user; } // Skip REST API
   			if(isset($_POST['woocommerce-login-nonce'])) {
   				$check = rcfwc_recaptcha_check();
   				$success = $check['success'];

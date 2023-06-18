@@ -3,7 +3,7 @@ Contributors: ElliotVS, RelyWP
 Tags: recaptcha,woocommerce,checkout,spam,protect
 Donate link: https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS
 Requires at least: 4.7
-Tested up to: 6.1.1
+Tested up to: 6.2.2
 Stable Tag: trunk
 License: GPLv3 or later.
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -45,7 +45,11 @@ The language for the WooCommerce reCAPTCHA will be automatically set based on yo
 
 ## Is it free to use? ##
 
-Yes, this plugin is completely free with no paid version, and it doesn't track your data. Google reCAPTCHA is also a completely free service!
+Yes, this plugin is completely free with no paid version.
+
+Google reCAPTCHA is also a completely free service. You can view their privacy policy <a href="https://policies.google.com/privacy">here</a> and terms and conditions <a href="https://policies.google.com/terms">here</a>.
+
+Please consider helping out by <a href="https://wordpress.org/support/plugin/recaptcha-woo/reviews/#new-post">leaving a review</a>, or <a href="https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS">donate</a>.
 
 ## Alternative Plugin ##
 
@@ -63,6 +67,21 @@ Want a user-friendly, privacy-preserving reCAPTCHA alternative? Check out the <a
 2. Example reCAPTCHA on the Checkout Page
 
 == Changelog ==
+
+= Version 1.3.0 - 18th June 2023 =
+- New: Added option to skip reCAPTCHA check for selected WooCommerce payment methods. Useful for Express Checkout options.
+- New: Added option to select the location of the reCAPTCHA on the checkout page.
+- Tweak: Update to make compatible with certain other login security plugins, or any other plugins that run the login "authenticate" multiple times.
+- Tweak: Added skip for REST API and XMLRPC on WordPress login check.
+- Tweak: Changing the keys will require the TEST API RESPONSE to be run again.
+- Tweak: Made a few small tweaks to the admin settings page.
+- Other: Tested with WordPress 6.2.2
+- Other: Tested with WooCommerce 7.8.0
+
+= Version 1.2.10 - 27th April 2023 =
+- Tweak: Edit to admin settings page.
+- Other: Tested with WordPress 6.2
+- Other: Tested with WooCommerce 7.6.1
 
 = Version 1.2.9 - 12th January 2023 =
 - Tweak: reCAPTCHA on WordPress login will now work better with plugins that hide/change the admin login URL.

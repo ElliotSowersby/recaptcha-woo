@@ -27,6 +27,8 @@ function register_rcfwc_settings() {
   register_setting( 'rcfwc-settings-group', 'rcfwc_woo_login' );
   register_setting( 'rcfwc-settings-group', 'rcfwc_woo_register' );
   register_setting( 'rcfwc-settings-group', 'rcfwc_woo_reset' );
+  register_setting( 'rcfwc-settings-group', 'rcfwc_selected_payment_methods' );
+  register_setting( 'rcfwc-settings-group', 'rcfwc_woo_checkout_pos' );
 }
 
 // Keys Updated
@@ -40,11 +42,11 @@ function rcfwc_keys_updated() {
  * Enqueue admin scripts
  */
 function rcfwc_admin_script_enqueue() {
-  wp_register_script("recaptcha", "https://www.google.com/recaptcha/api.js?explicit&hl=" . get_locale());
-  wp_enqueue_script("recaptcha");
-}
-add_action( 'admin_enqueue_scripts', 'rcfwc_admin_script_enqueue' );
-
+	wp_register_script("recaptcha", "https://www.google.com/recaptcha/api.js?explicit&hl=" . get_locale());
+	wp_enqueue_script("recaptcha");
+  }
+  add_action( 'admin_enqueue_scripts', 'rcfwc_admin_script_enqueue' );
+  
 // Admin test form to check reCAPTCHA response
 function rcfwc_admin_test() {
 	?>
@@ -86,7 +88,7 @@ function rcfwc_admin_test() {
 			echo rcfwc_field('', '');
 			echo '</div><div style="margin-bottom: -20px;"></div>';
 			echo '<button type="submit" style="margin-top: 10px; padding: 7px 10px; background: #1c781c; color: #fff; font-size: 15px; font-weight: bold; border: 1px solid #176017; border-radius: 4px; cursor: pointer;">
-			'.__( 'TEST API RESPONSE', 'recaptcha-woo' ).' <span class="dashicons dashicons-arrow-right-alt"></span>
+			'.__( 'TEST RESPONSE', 'recaptcha-woo' ).' <span class="dashicons dashicons-arrow-right-alt"></span>
 			</button>';
 		}
 		echo '</div>';
@@ -94,31 +96,30 @@ function rcfwc_admin_test() {
 	?>
 	</form>
 	<?php
-}
+}  
 
 // Show Settings Page
 function rcfwc_settings_page() {
 ?>
 <div class="wrap">
 
-<p style="font-size: 14px; background: #fff; padding: 10px; display: inline-block; border: 1px solid #333; border-radius: 4px; margin-bottom: 0;">
-  <strong style="color: green;"><?php echo __( '[NEW]', 'recaptcha-woo' ); ?></strong>
-  <?php echo __( '<a href="https://www.cloudflare.com/en-gb/products/turnstile/" target="_blank">Cloudflare Turnstile</a> is a new user-friendly, privacy-preserving, reCAPTCHA alternative!', 'recaptcha-woo' ); ?>
-  <br/>
-  <?php echo __( 'You can switch to this now with our new 100% free plugin:', 'recaptcha-woo' ); ?> <a href="<?php echo get_admin_url(); ?>plugin-install.php?s=Simple%20Cloudflare%20Turnstile%20RelyWP&tab=search&type=term" target="_blank">Simple Cloudflare Turnstile<span class="dashicons dashicons-external" style="height: 15px; font-size: 15px; margin-top: 2px; text-decoration: none;"></span></a>
-</p>
-
-<br/><br/>
-
 <h1><?php echo __( 'reCAPTCHA for WooCommerce', 'recaptcha-woo' ); ?></h1>
 
-<p><?php echo __( 'This plugin will add Google reCAPTCHA to your WooCommerce checkout and forms to help prevent spam.', 'recaptcha-woo' ); ?></p>
+<p><?php echo __( 'This plugin will add Google reCAPTCHA to your WooCommerce forms and checkout to help prevent spam.', 'recaptcha-woo' ); ?></p>
+
+<div class="rcfwc-admin-promo-top">
+	<p>
+		<a href="https://relywp.com/blog/how-to-add-google-recaptcha-to-woocommerce/?utm_source=plugin" title="View our reCAPTCHA plugin setup guide." target="_blank"><?php echo __('View setup guide', 'recaptcha-woo'); ?><span class="dashicons dashicons-external" style="margin-left: 2px; text-decoration: none;"></span></a> &nbsp;&#x2022;&nbsp; <?php echo __('Like this plugin?', 'recaptcha-woo'); ?> <a href="https://wordpress.org/support/plugin/recaptcha-woo/reviews/#new-post" target="_blank" title="<?php echo __('Review on WordPress.org', 'recaptcha-woo'); ?>"><?php echo __('Please submit a review', 'recaptcha-woo'); ?></a> <a href="https://wordpress.org/support/plugin/recaptcha-woo/reviews/#new-post" target="_blank" title="<?php echo __('Review on WordPress.org', 'recaptcha-woo'); ?>" style="text-decoration: none;">
+			<span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span>
+		</a>
+	</p>
+</div>
 
 <?php
 if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 	echo rcfwc_admin_test();
 } else {
-	echo '<p style="font-weight: bold; color: green;"><span class="dashicons dashicons-yes-alt"></span> ' . __( 'Success! reCAPTCHA seems to be working correctly with your API keys.', 'simple-cloudflare-turnstile' ) . '</p>';
+	echo '<p style="font-weight: bold; color: green; margin-top: 28px;"><span class="dashicons dashicons-yes-alt"></span> ' . __( 'Success! reCAPTCHA seems to be working correctly with your API keys.', 'recaptcha-woo' ) . '</p>';
 } ?>
 
 <form method="post" action="options.php">
@@ -171,21 +172,21 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 
 		<tr valign="top">
 			<th scope="row">
-			<?php echo __( 'WordPress Login', 'simple-cloudflare-turnstile' ); ?>
+			<?php echo __( 'WordPress Login', 'recaptcha-woo' ); ?>
 			</th>
 			<td><input type="checkbox" name="rcfwc_login" <?php if(get_option('rcfwc_login')) { ?>checked<?php } ?>></td>
 		</tr>
 
 		<tr valign="top">
 			<th scope="row">
-			<?php echo __( 'WordPress Register', 'simple-cloudflare-turnstile' ); ?>
+			<?php echo __( 'WordPress Register', 'recaptcha-woo' ); ?>
 			</th>
 			<td><input type="checkbox" name="rcfwc_register" <?php if(get_option('rcfwc_register')) { ?>checked<?php } ?>></td>
 		</tr>
 
 		<tr valign="top">
 			<th scope="row">
-			<?php echo __( 'Reset Password', 'simple-cloudflare-turnstile' ); ?>
+			<?php echo __( 'Reset Password', 'recaptcha-woo' ); ?>
 			</th>
 			<td><input type="checkbox" name="rcfwc_woo_reset" <?php if(get_option('rcfwc_woo_reset')) { ?>checked<?php } ?>></td>
 		</tr>
@@ -195,19 +196,6 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
   		<p style="font-size: 19px; margin-top: 0; margin-bottom: 0;"><?php echo __( 'WooCommerce Forms:', 'recaptcha-woo' ); ?></p>
   		</th>
   	</tr>
-
-    <tr valign="top" <?php if ( !class_exists( 'WooCommerce' ) ) { ?>style="opacity: 0.5; pointer-events: none;"<?php } ?>>
-			<th scope="row">
-				<?php echo __( 'WooCommerce Checkout', 'recaptcha-woo' ); ?>
-				<br/><br/>
-				<?php echo __( 'Guest Checkout Only', 'recaptcha-woo' ); ?>
-			</th>
-			<td>
-				<input type="checkbox" name="rcfwc_woo_checkout" <?php if(get_option('rcfwc_woo_checkout')) { ?>checked<?php } ?>>
-				<br/><br/>
-				<input type="checkbox" name="rcfwc_guest_only" <?php if(get_option('rcfwc_guest_only')) { ?>checked<?php } ?>>
-			</td>
-    </tr>
 
     <tr valign="top" <?php if ( !class_exists( 'WooCommerce' ) ) { ?>style="opacity: 0.5; pointer-events: none;"<?php } ?>>
 			<th scope="row">
@@ -222,30 +210,105 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 			</th>
 			<td><input type="checkbox" name="rcfwc_woo_register" <?php if(get_option('rcfwc_woo_register')) { ?>checked<?php } ?>></td>
     </tr>
+	
+    <tr valign="top" <?php if ( !class_exists( 'WooCommerce' ) ) { ?>style="opacity: 0.5; pointer-events: none;"<?php } ?>>
+			<th scope="row">
+				<?php echo __( 'WooCommerce Checkout', 'recaptcha-woo' ); ?>
+				<br/><br/>
+				<?php echo __( 'Guest Checkout Only', 'recaptcha-woo' ); ?>
+			</th>
+			<td>
+				<input type="checkbox" name="rcfwc_woo_checkout" <?php if(get_option('rcfwc_woo_checkout')) { ?>checked<?php } ?>>
+				<br/><br/>
+				<input type="checkbox" name="rcfwc_guest_only" <?php if(get_option('rcfwc_guest_only')) { ?>checked<?php } ?>>
+			</td>
+    </tr>
+
+	<tr valign="top" <?php if ( !class_exists( 'WooCommerce' ) ) { ?>style="opacity: 0.5; pointer-events: none;"<?php } ?>>
+		<th scope="row" style="padding-top: 0px;">
+			<?php echo __( 'Payment Methods to Skip', 'recaptcha-woo' ); ?>
+		</th>
+		<td style="padding-top: 0px;">
+		<?php
+		$selected_payment_methods = array();
+		$available_gateways = array();
+		if(class_exists( 'WooCommerce' )) {
+			$selected_payment_methods = get_option('rcfwc_selected_payment_methods', array());
+			$available_gateways = WC()->payment_gateways->get_available_payment_gateways();
+		}
+		if(!$selected_payment_methods) $selected_payment_methods = array();
+		?>
+		<?php if ( class_exists( 'WooCommerce' ) ) { ?>
+		<select multiple name="rcfwc_selected_payment_methods[]" style="max-width: 200px;">
+			<?php foreach ( $available_gateways as $gateway ) : ?>
+				<option value="<?php echo esc_attr( $gateway->id ); ?>" <?php echo in_array( $gateway->id, $selected_payment_methods, true ) ? 'selected' : ''; ?>>
+					<?php echo esc_html( $gateway->get_title() ); ?>
+				</option>
+			<?php endforeach; ?>
+		</select>
+		<?php } else { ?>
+			-
+		<?php } ?>
+		</td>
+	</tr>
+
+	<tr valign="top" <?php if ( !class_exists( 'WooCommerce' ) ) { ?>style="opacity: 0.5; pointer-events: none;"<?php } ?>>
+		<th scope="row" style="padding-top: 0px;">
+			<?php echo __( 'Widget Location on Checkout', 'recaptcha-woo' ); ?>
+		</th>
+		<td style="padding-top: 0px;">
+			<select name="rcfwc_woo_checkout_pos">
+				<option value="beforepay" <?php if (!get_option('rcfwc_woo_checkout_pos') || get_option('rcfwc_woo_checkout_pos') == "beforepay") { ?>selected<?php } ?>>
+					<?php esc_html_e('Before Payment', 'simple-cloudflare-turnstile'); ?>
+				</option>
+				<option value="afterpay" <?php if (get_option('rcfwc_woo_checkout_pos') == "afterpay") { ?>selected<?php } ?>>
+					<?php esc_html_e('After Payment', 'simple-cloudflare-turnstile'); ?>
+				</option>
+				<option value="beforebilling" <?php if (get_option('rcfwc_woo_checkout_pos') == "beforebilling") { ?>selected<?php } ?>>
+					<?php esc_html_e('Before Billing', 'simple-cloudflare-turnstile'); ?>
+				</option>
+				<option value="afterbilling" <?php if (get_option('rcfwc_woo_checkout_pos') == "afterbilling") { ?>selected<?php } ?>>
+					<?php esc_html_e('After Billing', 'simple-cloudflare-turnstile'); ?>
+				</option>
+			</select>
+		</td>
+	</tr>
 
     </table>
 
     <?php submit_button(); ?>
 
+	<br/>
+
     <div class="rfw-admin-promo">
 
-    <p style="font-size: 15px; font-weight: bold;"><?php echo __( '100% free plugin developed by', 'recaptcha-woo' ); ?> <a href="https://twitter.com/ElliotVS" target="_blank" title="@ElliotVS on Twitter">Elliot Sowersby</a> (<a href="https://www.relywp.com/?utm_source=rfw" target="_blank" title="RelyWP - WordPress Maintenance & Support">RelyWP</a>) 🙌</p>
+    <p style="font-size: 15px; font-weight: bold;"><?php echo __( '100% free plugin developed by', 'recaptcha-woo' ); ?> <a href="https://twitter.com/ElliotSowersby" target="_blank" title="@ElliotSowersby on Twitter">Elliot Sowersby</a> (<a href="https://www.relywp.com/?utm_source=rfw" target="_blank" title="RelyWP - WordPress Maintenance & Support">RelyWP</a>) 🙌</p>
 
     <p style="font-size: 15px;">- <?php echo __( 'Find this plugin useful?', 'recaptcha-woo' ); ?> <a href="https://wordpress.org/support/plugin/recaptcha-woo/reviews/#new-post" target="_blank"><?php echo __( 'Please submit a review', 'recaptcha-woo' ); ?></a> <a href="https://wordpress.org/support/plugin/recaptcha-woo/reviews/#new-post" target="_blank" style="text-decoration: none;">⭐️⭐️⭐️⭐️⭐️</a></p>
 
     <p style="font-size: 15px;">- <?php echo __( 'Need help? Have a suggestion?', 'recaptcha-woo' ); ?> <a href="https://wordpress.org/support/plugin/recaptcha-woo" target="_blank"><?php echo __( 'Create a support topic', 'recaptcha-woo' ); ?><span class="dashicons dashicons-external" style="font-size: 15px; margin-top: 5px; text-decoration: none;"></span></a></p>
 
-	<p style="font-size: 15px;">- <?php echo __( 'Want to support the developer?', 'simple-cloudflare-turnstile' ); ?> <?php echo __( 'Feel free to', 'simple-cloudflare-turnstile' ); ?> <a href="https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS" target="_blank"><?php echo __( 'Donate', 'simple-cloudflare-turnstile' ); ?><span class="dashicons dashicons-external" style="font-size: 15px; margin-top: 5px; text-decoration: none;"></span></a></p>
+	<p style="font-size: 15px;">- <?php echo __( 'Want to support the developer?', 'recaptcha-woo' ); ?> <?php echo __( 'Feel free to', 'recaptcha-woo' ); ?> <a href="https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS" target="_blank"><?php echo __( 'Donate', 'recaptcha-woo' ); ?><span class="dashicons dashicons-external" style="font-size: 15px; margin-top: 5px; text-decoration: none;"></span></a></p>
 
     <br/>
 
     <p style="font-size: 12px;">
 		<a href="https://translate.wordpress.org/projects/wp-plugins/recaptcha-woo/" target="_blank"><?php echo __( 'Translate into your language', 'recaptcha-woo' ); ?><span class="dashicons dashicons-external" style="font-size: 15px; margin-top: 2px; text-decoration: none;"></span></a>
 		<br/>
-		<a href="https://github.com/elliotvs/recaptcha-woo" target="_blank"><?php echo __( 'View on GitHub', 'simple-cloudflare-turnstile' ); ?><span class="dashicons dashicons-external" style="font-size: 15px; margin-top: 2px; text-decoration: none;"></span></a>
+		<a href="https://github.com/elliotsowersby/recaptcha-woo" target="_blank"><?php echo __( 'View on GitHub', 'recaptcha-woo' ); ?><span class="dashicons dashicons-external" style="font-size: 15px; margin-top: 2px; text-decoration: none;"></span></a>
 	</p>
 
     </div>
+
+	<p style="font-size: 14px; background: #fff; padding: 10px; display: inline-block; border: 1px solid #333; border-radius: 4px; margin-bottom: 0;">
+	<strong style="color: green;"><?php echo __( '[NEW]', 'recaptcha-woo' ); ?></strong>
+	<?php echo __( '<a href="https://www.cloudflare.com/en-gb/products/turnstile/" target="_blank">Cloudflare Turnstile</a> is a new user-friendly, privacy-preserving, reCAPTCHA alternative!', 'recaptcha-woo' ); ?>
+	<br/>
+	<?php echo __( 'You can switch to this now with our new 100% free plugin:', 'recaptcha-woo' ); ?> <a href="<?php echo get_admin_url(); ?>plugin-install.php?s=Simple%20Cloudflare%20Turnstile%20RelyWP&tab=search&type=term" target="_blank">Simple Cloudflare Turnstile<span class="dashicons dashicons-external" style="height: 15px; font-size: 15px; margin-top: 2px; text-decoration: none;"></span></a>
+	</p>
+
+	<br/><br/>
+
 </form>
 </div>
 
