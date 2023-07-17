@@ -320,4 +320,16 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
 
   }
 
+	if(get_option('rcfwc_woo_my_account_payment_page')) {
+		add_action('woocommerce_add_payment_method_form_bottom', 'rcfwc_field_admin');
+		add_filter('woocommerce_add_payment_method_form_is_valid', 'rcfwc_add_payment_method_check', 10, 1);
+		function rcfwc_add_payment_method_check($result) {
+			$check = rcfwc_recaptcha_check();
+			$success = $check['success'];
+			if($success != true) {
+				wc_add_notice( __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ), 'error' );
+			}
+			return $success;
+		}
+	}
 }
