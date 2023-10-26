@@ -3,7 +3,7 @@ Contributors: ElliotVS, RelyWP
 Tags: recaptcha,woocommerce,checkout,spam,protect
 Donate link: https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS
 Requires at least: 4.7
-Tested up to: 6.2.2
+Tested up to: 6.4.0
 Stable Tag: trunk
 License: GPLv3 or later.
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -67,6 +67,12 @@ Want a user-friendly, privacy-preserving reCAPTCHA alternative? Check out the <a
 2. Example reCAPTCHA on the Checkout Page
 
 == Changelog ==
+
+= Version 1.3.2 - 26th October 2023 =
+- Tweak: Added function to declare comaptibility with with HPOS.
+- Fix: Fixed issue with reCAPTCHA not resetting on checkout if there is an error submitting checkout.
+- Fix: Fixed a "grecaptcha.reset is not a function" javascript console error that could occur on the checkout page.
+- Other: Tested with WordPress 6.4.0
 
 = Version 1.3.1 - 26th July 2023 =
 - Tweak: Modified the "Payment Methods to Skip" option (for WooCommerce) information to be easier to understand, and now displayed as checkboxes instead of a multi-select field.
