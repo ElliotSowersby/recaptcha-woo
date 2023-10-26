@@ -68,6 +68,9 @@ Want a user-friendly, privacy-preserving reCAPTCHA alternative? Check out the <a
 
 == Changelog ==
 
+= Version 1.3.1 - 26th July 2023 =
+- Tweak: Modified the "Payment Methods to Skip" option (for WooCommerce) information to be easier to understand, and now displayed as checkboxes instead of a multi-select field.
+
 = Version 1.3.0 - 18th June 2023 =
 - New: Added option to skip reCAPTCHA check for selected WooCommerce payment methods. Useful for Express Checkout options.
 - New: Added option to select the location of the reCAPTCHA on the checkout page.

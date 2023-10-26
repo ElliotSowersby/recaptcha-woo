@@ -110,7 +110,7 @@ function rcfwc_settings_page() {
 <div class="rcfwc-admin-promo-top">
 	<p>
 		<a href="https://relywp.com/blog/how-to-add-google-recaptcha-to-woocommerce/?utm_source=plugin" title="View our reCAPTCHA plugin setup guide." target="_blank"><?php echo __('View setup guide', 'recaptcha-woo'); ?><span class="dashicons dashicons-external" style="margin-left: 2px; text-decoration: none;"></span></a> &nbsp;&#x2022;&nbsp; <?php echo __('Like this plugin?', 'recaptcha-woo'); ?> <a href="https://wordpress.org/support/plugin/recaptcha-woo/reviews/#new-post" target="_blank" title="<?php echo __('Review on WordPress.org', 'recaptcha-woo'); ?>"><?php echo __('Please submit a review', 'recaptcha-woo'); ?></a> <a href="https://wordpress.org/support/plugin/recaptcha-woo/reviews/#new-post" target="_blank" title="<?php echo __('Review on WordPress.org', 'recaptcha-woo'); ?>" style="text-decoration: none;">
-			<span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span>
+		⭐️⭐️⭐️⭐️⭐️
 		</a>
 	</p>
 </div>
@@ -226,34 +226,6 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 
 	<tr valign="top" <?php if ( !class_exists( 'WooCommerce' ) ) { ?>style="opacity: 0.5; pointer-events: none;"<?php } ?>>
 		<th scope="row" style="padding-top: 0px;">
-			<?php echo __( 'Payment Methods to Skip', 'recaptcha-woo' ); ?>
-		</th>
-		<td style="padding-top: 0px;">
-		<?php
-		$selected_payment_methods = array();
-		$available_gateways = array();
-		if(class_exists( 'WooCommerce' )) {
-			$selected_payment_methods = get_option('rcfwc_selected_payment_methods', array());
-			$available_gateways = WC()->payment_gateways->get_available_payment_gateways();
-		}
-		if(!$selected_payment_methods) $selected_payment_methods = array();
-		?>
-		<?php if ( class_exists( 'WooCommerce' ) ) { ?>
-		<select multiple name="rcfwc_selected_payment_methods[]" style="max-width: 200px;">
-			<?php foreach ( $available_gateways as $gateway ) : ?>
-				<option value="<?php echo esc_attr( $gateway->id ); ?>" <?php echo in_array( $gateway->id, $selected_payment_methods, true ) ? 'selected' : ''; ?>>
-					<?php echo esc_html( $gateway->get_title() ); ?>
-				</option>
-			<?php endforeach; ?>
-		</select>
-		<?php } else { ?>
-			-
-		<?php } ?>
-		</td>
-	</tr>
-
-	<tr valign="top" <?php if ( !class_exists( 'WooCommerce' ) ) { ?>style="opacity: 0.5; pointer-events: none;"<?php } ?>>
-		<th scope="row" style="padding-top: 0px;">
 			<?php echo __( 'Widget Location on Checkout', 'recaptcha-woo' ); ?>
 		</th>
 		<td style="padding-top: 0px;">
@@ -275,6 +247,58 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 	</tr>
 
     </table>
+
+	<?php if ( class_exists( 'WooCommerce' ) ) { ?>
+
+		<?php $available_gateways = WC()->payment_gateways->get_available_payment_gateways(); ?>
+
+		<?php if(!empty($available_gateways)) { ?>
+
+		<p style="font-size: 15px; font-weight: 600; margin-top: 0;">
+			<?php echo __('Payment Methods to Skip', 'simple-cloudflare-turnstile'); ?>
+			<span id="toggleButtonSkipMethods" class="dashicons dashicons-arrow-down" style="cursor:pointer;"></span> <!-- arrow for toggling -->
+		</p>
+
+		<div id="toggleContentSkipMethods" style="display: none;"> <!-- Initially hidden -->
+
+			<i style="font-size: 10px;">
+			<?php echo __("If selected below, reCAPTCHA check will not be run for that specific payment method.", 'simple-cloudflare-turnstile'); ?>
+			<br/>
+			<?php echo __("Useful for 'Express Checkout' payment methods compatibility.", 'simple-cloudflare-turnstile'); ?>
+			</i>
+
+			<?php
+			$selected_payment_methods = get_option('rcfwc_selected_payment_methods', array());
+			if(!$selected_payment_methods) $selected_payment_methods = array();
+			if(!empty($available_gateways)) { ?>
+				<div style="margin-top: 10px; max-width: 200px;">
+				<?php foreach ( $available_gateways as $gateway ) : ?>
+					<p>
+						<input type="checkbox" name="rcfwc_selected_payment_methods[]" style="float: none; margin-top: 2px;"
+						value="<?php echo esc_attr( $gateway->id ); ?>" <?php echo in_array( $gateway->id, $selected_payment_methods, true ) ? 'checked' : ''; ?> >
+						<label><?php echo __("Skip:", 'simple-cloudflare-turnstile'); ?> <?php echo esc_html( $gateway->get_title() ); ?></label>
+					</p>
+				<?php endforeach; ?>
+				</div>
+			<?php } ?>
+		</div>
+
+		<script type="text/javascript">
+			document.getElementById("toggleButtonSkipMethods").addEventListener("click", function() {
+				var content = document.getElementById("toggleContentSkipMethods");
+				if (content.style.display === "none") {
+					content.style.display = "block"; // Show content
+					this.className = "dashicons dashicons-arrow-up"; // Arrow up
+				} else {
+					content.style.display = "none"; // Hide content
+					this.className = "dashicons dashicons-arrow-down"; // Arrow down
+				}
+			});
+		</script>
+
+		<?php } ?>
+
+	<?php } ?>
 
     <?php submit_button(); ?>
 
