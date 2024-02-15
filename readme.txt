@@ -71,6 +71,7 @@ Want a user-friendly, privacy-preserving reCAPTCHA alternative? Check out the <a
 = Version 1.3.3 - 15th February 2024 =
 - Tweak: Set the loading of JS file and reCAPTCHA script to be deferred.
 - Tweak: A few small changes to the admin settings page.
+- Tweak: Added skip REST API for the registration form check.
 - Other: Tested with WordPress 6.4.3
 - Other: Tested with WooCommerce 8.5.2
 
