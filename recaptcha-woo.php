@@ -2,14 +2,14 @@
 /**
 * Plugin Name: reCAPTCHA for WooCommerce
 * Description: Add Google reCAPTCHA to your WooCommerce Checkout, Login, and Registration Forms.
-* Version: 1.3.2
+* Version: 1.3.3
 * Author: Elliot Sowersby, RelyWP
 * Author URI: https://www.relywp.com
 * License: GPLv3 or later
 * Text Domain: recaptcha-woo
 *
 * WC requires at least: 3.4
-* WC tested up to: 7.8.0
+* WC tested up to: 8.5.2
 **/
 
 include( plugin_dir_path( __FILE__ ) . 'admin-options.php');
@@ -56,9 +56,8 @@ function rcfwc_settings_link_plugin( $actions, $plugin_file )
 // Enqueue recaptcha script only on account or checkout page
 add_action("wp_enqueue_scripts", "rcfwc_script_enqueue");
 function rcfwc_script_enqueue() {
-	wp_enqueue_script( 'rcfwc-js', plugins_url( '/js/rcfwc.js', __FILE__ ), array('jquery'), '1.0', false);
-	wp_register_script("recaptcha", "https://www.google.com/recaptcha/api.js?explicit&hl=" . get_locale());
-	wp_enqueue_script("recaptcha");
+	wp_enqueue_script( 'rcfwc-js', plugins_url( '/js/rcfwc.js', __FILE__ ), array('jquery'), '1.0', array('strategy' => 'defer'));
+	wp_enqueue_script( 'recaptcha', 'https://www.google.com/recaptcha/api.js?explicit&hl=' . get_locale(), array(), null, array('strategy' => 'defer'));
 }
 add_action("wp_enqueue_scripts", "rcfwc_script");
 function rcfwc_script() {
@@ -210,6 +209,7 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
 		add_action('registration_errors', 'rcfwc_wp_register_check', 10, 3);
 		function rcfwc_wp_register_check($errors, $sanitized_user_login, $user_email) {
 			if(defined( 'XMLRPC_REQUEST')) { return $errors; } // Skip XMLRPC
+			if(defined( 'REST_REQUEST')) { return $errors; } // Skip REST API
 			$check = rcfwc_recaptcha_check();
 			$success = $check['success'];
 			if($success != true) {
