@@ -56,16 +56,16 @@ function rcfwc_settings_link_plugin( $actions, $plugin_file )
 // Enqueue recaptcha script only on account or checkout page
 add_action("wp_enqueue_scripts", "rcfwc_script_enqueue");
 function rcfwc_script_enqueue() {
-	wp_enqueue_script( 'rcfwc-js', plugins_url( '/js/rcfwc.js', __FILE__ ), array('jquery'), '1.0', array('strategy' => 'defer'));
-	wp_enqueue_script( 'recaptcha', 'https://www.google.com/recaptcha/api.js?explicit&hl=' . get_locale(), array(), null, array('strategy' => 'defer'));
+	if ( is_checkout() || is_account_page() ) {
+		wp_enqueue_script( 'rcfwc-js', plugins_url( '/js/rcfwc.js', __FILE__ ), array('jquery'), '1.0', array('strategy' => 'defer'));
+		wp_enqueue_script( 'recaptcha', 'https://www.google.com/recaptcha/api.js?explicit&hl=' . get_locale(), array(), null, array('strategy' => 'defer'));
+	}
 }
 add_action("wp_enqueue_scripts", "rcfwc_script");
 function rcfwc_script() {
-  if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-  	if ( is_checkout() || is_account_page() ) {
-  		 rcfwc_script_enqueue();
+  	if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+  		rcfwc_script_enqueue();
   	}
-  }
 }
 // Enqueue recaptcha script on login
 add_action("login_enqueue_scripts", "rcfwc_script_login");
