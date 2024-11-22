@@ -231,16 +231,16 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 		<td style="padding-top: 0px;">
 			<select name="rcfwc_woo_checkout_pos">
 				<option value="beforepay" <?php if (!get_option('rcfwc_woo_checkout_pos') || get_option('rcfwc_woo_checkout_pos') == "beforepay") { ?>selected<?php } ?>>
-					<?php esc_html_e('Before Payment', 'simple-cloudflare-turnstile'); ?>
+					<?php esc_html_e('Before Payment', 'recaptcha-woo'); ?>
 				</option>
 				<option value="afterpay" <?php if (get_option('rcfwc_woo_checkout_pos') == "afterpay") { ?>selected<?php } ?>>
-					<?php esc_html_e('After Payment', 'simple-cloudflare-turnstile'); ?>
+					<?php esc_html_e('After Payment', 'recaptcha-woo'); ?>
 				</option>
 				<option value="beforebilling" <?php if (get_option('rcfwc_woo_checkout_pos') == "beforebilling") { ?>selected<?php } ?>>
-					<?php esc_html_e('Before Billing', 'simple-cloudflare-turnstile'); ?>
+					<?php esc_html_e('Before Billing', 'recaptcha-woo'); ?>
 				</option>
 				<option value="afterbilling" <?php if (get_option('rcfwc_woo_checkout_pos') == "afterbilling") { ?>selected<?php } ?>>
-					<?php esc_html_e('After Billing', 'simple-cloudflare-turnstile'); ?>
+					<?php esc_html_e('After Billing', 'recaptcha-woo'); ?>
 				</option>
 			</select>
 		</td>
@@ -255,16 +255,16 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 		<?php if(!empty($available_gateways)) { ?>
 
 		<p style="font-size: 15px; font-weight: 600; margin-top: 0;">
-			<?php echo __('Payment Methods to Skip', 'simple-cloudflare-turnstile'); ?>
+			<?php echo __('Payment Methods to Skip', 'recaptcha-woo'); ?>
 			<span id="toggleButtonSkipMethods" class="dashicons dashicons-arrow-down" style="cursor:pointer;"></span> <!-- arrow for toggling -->
 		</p>
 
 		<div id="toggleContentSkipMethods" style="display: none;"> <!-- Initially hidden -->
 
 			<i style="font-size: 10px;">
-			<?php echo __("If selected below, reCAPTCHA check will not be run for that specific payment method.", 'simple-cloudflare-turnstile'); ?>
+			<?php echo __("If selected below, reCAPTCHA check will not be run for that specific payment method.", 'recaptcha-woo'); ?>
 			<br/>
-			<?php echo __("Useful for 'Express Checkout' payment methods compatibility.", 'simple-cloudflare-turnstile'); ?>
+			<?php echo __("Useful for 'Express Checkout' payment methods compatibility.", 'recaptcha-woo'); ?>
 			</i>
 
 			<?php
@@ -276,7 +276,7 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 					<p>
 						<input type="checkbox" name="rcfwc_selected_payment_methods[]" style="float: none; margin-top: 2px;"
 						value="<?php echo esc_attr( $gateway->id ); ?>" <?php echo in_array( $gateway->id, $selected_payment_methods, true ) ? 'checked' : ''; ?> >
-						<label><?php echo __("Skip:", 'simple-cloudflare-turnstile'); ?> <?php echo esc_html( $gateway->get_title() ); ?></label>
+						<label><?php echo __("Skip:", 'recaptcha-woo'); ?> <?php echo esc_html( $gateway->get_title() ); ?></label>
 					</p>
 				<?php endforeach; ?>
 				</div>
@@ -314,8 +314,6 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 
 		<p style="font-size: 15px;">- <?php echo __( 'Want to support the developer?', 'recaptcha-woo' ); ?> <?php echo __( 'Feel free to', 'recaptcha-woo' ); ?> <a href="https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS" target="_blank"><?php echo __( 'Donate', 'recaptcha-woo' ); ?><span class="dashicons dashicons-external" style="font-size: 15px; margin-top: 5px; text-decoration: none;"></span></a></p>
 
-		<br/>
-
 		<p style="font-size: 12px;">
 			
 			<a href="https://translate.wordpress.org/projects/wp-plugins/recaptcha-woo/" target="_blank"><?php echo __( 'Translate into your language', 'recaptcha-woo' ); ?><span class="dashicons dashicons-external" style="font-size: 15px; margin-top: 2px; text-decoration: none;"></span></a>
@@ -334,13 +332,19 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 
 		<p style="font-size: 15px; font-weight: bold;"><?php echo __( 'Check out our other plugins:', 'recaptcha-woo' ); ?></p>
 
-		<p style="font-size: 15px;"><a href="https://couponaffiliates.com/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'Coupon Affiliates for WooCommerce', 'recaptcha-woo' ); ?></a></p>
+		<p style="font-size: 15px;"><a href="https://wordpress.org/plugins/simple-cloudflare-turnstile/" target="_blank"><?php echo __( 'Simple Cloudflare Turnstile', 'recaptcha-woo' ); ?></a> - <?php echo __( 'A user-friendly, privacy-preserving reCAPTCHA alternative.', 'recaptcha-woo' ); ?></p>
 
-		<p style="font-size: 15px;"><a href="https://relywp.com/plugins/tax-exemption-woocommerce/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'Tax Exemption for WooCommerce', 'recaptcha-woo' ); ?></a></p>
+		<p style="font-size: 15px;"><a href="https://couponaffiliates.com/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'Coupon Affiliates for WooCommerce', 'recaptcha-woo' ); ?></a> - <?php echo __( 'Create a coupon-based affiliate plugin.', 'recaptcha-woo' ); ?></p>
 
-	<br/>
+		<p style="font-size: 15px;"><a href="https://relywp.com/plugins/tax-exemption-woocommerce/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'Tax Exemption for WooCommerce', 'recaptcha-woo' ); ?></a> - <?php echo __( 'Allow customers to easily claim tax/VAT exemption.', 'recaptcha-woo' ); ?></p>
 
-	<br/><br/>
+		<p style="font-size: 15px;"><a href="https://relywp.com/plugins/better-coupon-restrictions-woocommerce/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'Better Coupon Restrictions for WooCommerce', 'recaptcha-woo' ); ?></a> - <?php echo __( 'Add advanced coupon restrictions to WooCommerce.', 'recaptcha-woo' ); ?></p>
+
+		<p style="font-size: 15px;"><a href="https://relywp.com/plugins/advanced-customer-reports-woocommerce/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'Advanced Customer Reports for WooCommerce', 'recaptcha-woo' ); ?></a> - <?php echo __( 'View detailed analytics and data for each of your customers.', 'recaptcha-woo' ); ?></p>
+
+		<p style="font-size: 15px;"><a href="https://relywp.com/plugins/ai-text-to-speech/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'AI Text to Speech', 'recaptcha-woo' ); ?></a> - <?php echo __( 'Generate and display an AI audio version of your posts.', 'recaptcha-woo' ); ?></p>
+
+	<br/><br/><br/>
 
 </form>
 </div>
