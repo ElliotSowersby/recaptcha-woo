@@ -164,11 +164,11 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 			</td>
 		</tr>
 
-    <tr valign="top">
-  		<th scope="row" style="padding-bottom: 0;">
-  		<p style="font-size: 19px; margin-top: 0; margin-bottom: 0;"><?php echo __( 'WordPress Forms:', 'recaptcha-woo' ); ?></p>
-  		</th>
-  	</tr>
+		<tr valign="top">
+			<th scope="row" style="padding-bottom: 0;">
+			<p style="font-size: 19px; margin-top: 0; margin-bottom: 0;"><?php echo __( 'WordPress Forms:', 'recaptcha-woo' ); ?></p>
+			</th>
+		</tr>
 
 		<tr valign="top">
 			<th scope="row">
@@ -299,6 +299,28 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 		<?php } ?>
 
 	<?php } ?>
+
+	<table class="form-table">
+
+		<tr valign="top">
+			<th scope="row" style="padding-bottom: 0;">
+			<p style="font-size: 19px; margin-top: 0; margin-bottom: 0;"><?php echo __( 'Other Settings', 'recaptcha-woo' ); ?></p>
+			</th>
+		</tr>
+
+		<tr valign="top">
+			<th scope="row">
+			<?php echo __( 'Load scripts on all pages?', 'recaptcha-woo' ); ?>
+			</th>
+			<td>
+				<input type="checkbox" name="rrcfwc_scripts_all" <?php if(get_option('rcfwc_scripts_all', true)) { ?>checked<?php } ?>>
+				<i style="font-size: 12px; margin-top: 5px;">
+					<?php echo __( 'If unchecked, scripts will only load on the WP Login, My Account, and Checkout pages.', 'recaptcha-woo' ); ?>
+			</i>
+			</td>
+		</tr>
+
+	</table>
 
     <?php submit_button(); ?>
 
