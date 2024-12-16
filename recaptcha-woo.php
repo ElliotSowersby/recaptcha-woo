@@ -285,19 +285,19 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
   	if( get_option('rcfwc_key') && get_option('rcfwc_woo_checkout') ) {
 		if(empty(get_option('rcfwc_woo_checkout_pos')) || get_option('rcfwc_woo_checkout_pos') == "beforepay") {
 			add_action('woocommerce_review_order_before_payment', 'rcfwc_field_checkout', 10);
-			add_filter('render_block_woocommerce/checkout-payment-block', 'rcfwc_render_pre_block', 10, 1); // Before Payment block.
+			add_filter('render_block_woocommerce/checkout-payment-block', 'rcfwc_render_pre_block', 999, 1); // Before Payment block.
 		} elseif(get_option('rcfwc_woo_checkout_pos') == "afterpay") {
 			add_action('woocommerce_review_order_after_payment', 'rcfwc_field_checkout', 10);
-			add_filter('render_block_woocommerce/checkout-payment-block', 'rcfwc_render_post_block', 10, 1); // After Payment block.
+			add_filter('render_block_woocommerce/checkout-payment-block', 'rcfwc_render_post_block', 999, 1); // After Payment block.
 		} elseif(get_option('rcfwc_woo_checkout_pos') == "beforebilling") {
 			add_action('woocommerce_before_checkout_billing_form', 'rcfwc_field_checkout', 10);
-			add_filter('render_block_woocommerce/checkout-contact-information-block', 'rcfwc_render_pre_block', 10, 1); // Before Contact Information block.
+			add_filter('render_block_woocommerce/checkout-contact-information-block', 'rcfwc_render_pre_block', 999, 1); // Before Contact Information block.
 		} elseif(get_option('rcfwc_woo_checkout_pos') == "afterbilling") {
 			add_action('woocommerce_after_checkout_billing_form', 'rcfwc_field_checkout', 10);
-			add_filter('render_block_woocommerce/checkout-shipping-methods-block', 'rcfwc_render_pre_block', 10, 1); // Before Shipping Methods block.
+			add_filter('render_block_woocommerce/checkout-shipping-methods-block', 'rcfwc_render_pre_block', 999, 1); // Before Shipping Methods block.
 		} elseif(get_option('rcfwc_woo_checkout_pos') == "beforesubmit") {
 			add_action('woocommerce_review_order_before_submit', 'rcfwc_field_checkout', 10);
-			add_filter('render_block_woocommerce/checkout-actions-block', 'rcfwc_render_pre_block', 10, 1); // Before Actions block, not sure if this option is still supported.
+			add_filter('render_block_woocommerce/checkout-actions-block', 'rcfwc_render_pre_block', 999, 1); // Before Actions block, not sure if this option is still supported.
 		}
   		add_action('woocommerce_checkout_process', 'rcfwc_checkout_check');
 		add_action('woocommerce_store_api_checkout_update_order_from_request', 'rcfwc_checkout_block_check', 10, 2);
