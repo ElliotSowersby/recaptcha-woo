@@ -29,6 +29,7 @@ function register_rcfwc_settings() {
   register_setting( 'rcfwc-settings-group', 'rcfwc_woo_reset' );
   register_setting( 'rcfwc-settings-group', 'rcfwc_selected_payment_methods' );
   register_setting( 'rcfwc-settings-group', 'rcfwc_woo_checkout_pos' );
+  register_setting( 'rcfwc-settings-group', 'rcfwc_scripts_all' );
 }
 
 // Keys Updated
@@ -313,7 +314,7 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 			<?php echo __( 'Load scripts on all pages?', 'recaptcha-woo' ); ?>
 			</th>
 			<td>
-				<input type="checkbox" name="rrcfwc_scripts_all" <?php if(get_option('rcfwc_scripts_all', true)) { ?>checked<?php } ?>>
+				<input type="checkbox" name="rcfwc_scripts_all" <?php if(get_option('rcfwc_scripts_all', true)) { ?>checked<?php } ?>>
 				<i style="font-size: 12px; margin-top: 5px;">
 					<?php echo __( 'If unchecked, scripts will only load on the WP Login, My Account, and Checkout pages.', 'recaptcha-woo' ); ?>
 			</i>
@@ -348,25 +349,25 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 
     </div>
 
-	<br/>
+	<br/><br/>
 
-    <div class="rfw-admin-promo">
+    <div class="rfw-admin-promo" style="background: #f9f9f9; border: 1px solid #e5e5e5; border-radius: 10px; padding: 15px 25px; display: inline-block;">
 
 		<p style="font-size: 15px; font-weight: bold;"><?php echo __( 'Check out our other plugins:', 'recaptcha-woo' ); ?></p>
 
-		<p style="font-size: 15px;"><a href="https://wordpress.org/plugins/simple-cloudflare-turnstile/" target="_blank"><?php echo __( 'Simple Cloudflare Turnstile', 'recaptcha-woo' ); ?></a> - <?php echo __( 'A user-friendly, privacy-preserving reCAPTCHA alternative.', 'recaptcha-woo' ); ?></p>
+		<p style="font-size: 15px;">- <a href="https://wordpress.org/plugins/simple-cloudflare-turnstile/" target="_blank"><?php echo __( 'Simple Cloudflare Turnstile', 'recaptcha-woo' ); ?></a> - <?php echo __( 'A user-friendly, privacy-preserving reCAPTCHA alternative.', 'recaptcha-woo' ); ?></p>
 
-		<p style="font-size: 15px;"><a href="https://couponaffiliates.com/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'Coupon Affiliates for WooCommerce', 'recaptcha-woo' ); ?></a> - <?php echo __( 'Create a coupon-based affiliate plugin.', 'recaptcha-woo' ); ?></p>
+		<p style="font-size: 15px;">- <a href="https://couponaffiliates.com/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'Coupon Affiliates for WooCommerce', 'recaptcha-woo' ); ?></a> - <?php echo __( 'Create a coupon-based affiliate plugin.', 'recaptcha-woo' ); ?></p>
 
-		<p style="font-size: 15px;"><a href="https://relywp.com/plugins/tax-exemption-woocommerce/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'Tax Exemption for WooCommerce', 'recaptcha-woo' ); ?></a> - <?php echo __( 'Allow customers to easily claim tax/VAT exemption.', 'recaptcha-woo' ); ?></p>
+		<p style="font-size: 15px;">- <a href="https://relywp.com/plugins/tax-exemption-woocommerce/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'Tax Exemption for WooCommerce', 'recaptcha-woo' ); ?></a> - <?php echo __( 'Allow customers to easily claim tax/VAT exemption.', 'recaptcha-woo' ); ?></p>
 
-		<p style="font-size: 15px;"><a href="https://relywp.com/plugins/better-coupon-restrictions-woocommerce/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'Better Coupon Restrictions for WooCommerce', 'recaptcha-woo' ); ?></a> - <?php echo __( 'Add advanced coupon restrictions to WooCommerce.', 'recaptcha-woo' ); ?></p>
+		<p style="font-size: 15px;">- <a href="https://relywp.com/plugins/better-coupon-restrictions-woocommerce/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'Better Coupon Restrictions for WooCommerce', 'recaptcha-woo' ); ?></a> - <?php echo __( 'Add advanced coupon restrictions to WooCommerce.', 'recaptcha-woo' ); ?></p>
 
-		<p style="font-size: 15px;"><a href="https://relywp.com/plugins/advanced-customer-reports-woocommerce/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'Advanced Customer Reports for WooCommerce', 'recaptcha-woo' ); ?></a> - <?php echo __( 'View detailed analytics and data for each of your customers.', 'recaptcha-woo' ); ?></p>
+		<p style="font-size: 15px;">- <a href="https://relywp.com/plugins/advanced-customer-reports-woocommerce/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'Advanced Customer Reports for WooCommerce', 'recaptcha-woo' ); ?></a> - <?php echo __( 'View detailed analytics and data for each of your customers.', 'recaptcha-woo' ); ?></p>
 
-		<p style="font-size: 15px;"><a href="https://relywp.com/plugins/ai-text-to-speech/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'AI Text to Speech', 'recaptcha-woo' ); ?></a> - <?php echo __( 'Generate and display an AI audio version of your posts.', 'recaptcha-woo' ); ?></p>
+		<p style="font-size: 15px;">- <a href="https://relywp.com/plugins/ai-text-to-speech/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'AI Text to Speech', 'recaptcha-woo' ); ?></a> - <?php echo __( 'Generate and display an AI audio version of your posts.', 'recaptcha-woo' ); ?></p>
 
-	<br/><br/><br/>
+	</div>
 
 </form>
 </div>
