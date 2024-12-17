@@ -120,12 +120,53 @@ function rcfwc_field_checkout($checkout) {
 	}
 }
 
-// Check the reCAPTCHA on submit.
-function rcfwc_recaptcha_check() {
+// Field Checkout block
+function rcfwc_field_checkout_block() {
+	$key = esc_attr( get_option('rcfwc_key') );
+	$secret = esc_attr( get_option('rcfwc_secret') );
+	$theme = esc_attr( get_option('rcfwc_theme') );
+	$guest = esc_attr( get_option('rcfwc_guest_only') );
+	?>
+	<?php if ( !$guest || ( $guest && !is_user_logged_in() ) ) {
+		if($key && $secret) {
+			?>
+			<div class="g-recaptcha" <?php if($theme == "dark") { ?>data-theme="dark" <?php } ?>data-sitekey="<?php echo $key; ?>"></div>
+			<br/>
+			<?php
+		}
+	} ?>
+	<?php
+	return;
+}
 
-	$postdata = "";
-	if(isset($_POST['g-recaptcha-response'])) {
-		$postdata = sanitize_text_field( $_POST['g-recaptcha-response'] );
+function rcfwc_render_post_block($block_content) {
+	ob_start();
+	echo $block_content;
+	rcfwc_field_checkout_block();
+	$block_content = ob_get_contents();
+	ob_end_clean();
+	return $block_content;
+}
+
+function rcfwc_render_pre_block($block_content) {
+	ob_start();
+	rcfwc_field_checkout_block();
+	echo $block_content;
+	$block_content = ob_get_contents();
+	ob_end_clean();
+	return $block_content;
+}
+
+// Check the reCAPTCHA on submit.
+function rcfwc_recaptcha_check($token = null) {
+
+	if ( isset( $token ) ) {
+		$postdata = $token;
+	} else {
+		$postdata = "";
+		if(isset($_POST['g-recaptcha-response'])) {
+			$postdata = sanitize_text_field( $_POST['g-recaptcha-response'] );
+		}
 	}
 
 	$key = esc_attr( get_option('rcfwc_key') );
@@ -244,16 +285,40 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
   	if( get_option('rcfwc_key') && get_option('rcfwc_woo_checkout') ) {
 		if(empty(get_option('rcfwc_woo_checkout_pos')) || get_option('rcfwc_woo_checkout_pos') == "beforepay") {
 			add_action('woocommerce_review_order_before_payment', 'rcfwc_field_checkout', 10);
+			add_filter('render_block_woocommerce/checkout-payment-block', 'rcfwc_render_pre_block', 999, 1); // Before Payment block.
 		} elseif(get_option('rcfwc_woo_checkout_pos') == "afterpay") {
 			add_action('woocommerce_review_order_after_payment', 'rcfwc_field_checkout', 10);
+			add_filter('render_block_woocommerce/checkout-payment-block', 'rcfwc_render_post_block', 999, 1); // After Payment block.
 		} elseif(get_option('rcfwc_woo_checkout_pos') == "beforebilling") {
 			add_action('woocommerce_before_checkout_billing_form', 'rcfwc_field_checkout', 10);
+			add_filter('render_block_woocommerce/checkout-contact-information-block', 'rcfwc_render_pre_block', 999, 1); // Before Contact Information block.
 		} elseif(get_option('rcfwc_woo_checkout_pos') == "afterbilling") {
 			add_action('woocommerce_after_checkout_billing_form', 'rcfwc_field_checkout', 10);
+			add_filter('render_block_woocommerce/checkout-shipping-methods-block', 'rcfwc_render_pre_block', 999, 1); // Before Shipping Methods block.
 		} elseif(get_option('rcfwc_woo_checkout_pos') == "beforesubmit") {
 			add_action('woocommerce_review_order_before_submit', 'rcfwc_field_checkout', 10);
+			add_filter('render_block_woocommerce/checkout-actions-block', 'rcfwc_render_pre_block', 999, 1); // Before Actions block, not sure if this option is still supported.
 		}
   		add_action('woocommerce_checkout_process', 'rcfwc_checkout_check');
+		add_action('woocommerce_store_api_checkout_update_order_from_request', 'rcfwc_checkout_block_check', 10, 2);
+		add_action('woocommerce_loaded', 'rcfwc_register_endpoint_data');
+		function rcfwc_register_endpoint_data() {
+			woocommerce_store_api_register_endpoint_data(
+				array(
+					'endpoint'        => 'checkout',
+				'namespace'       => 'rcfwc',
+				'schema_callback' => function() {
+					return array(
+						'token' => array(
+							'description' => __( 'reCaptcha token.', 'recaptcha-woo' ),
+							'type'        => 'string',
+							'context'     => array()
+						),
+					);
+				},
+				)
+			);
+		}
   		function rcfwc_checkout_check() {
 			// Skip if reCAPTCHA disabled for payment method
 			$skip = 0;
@@ -279,6 +344,44 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
   				}
   			}
   		}
+
+		function rcfwc_checkout_block_check($order, $request) {
+			// Skip if reCAPTCHA disabled for payment method
+			$skip = 0;
+			if ( $request->get_method() === 'POST' ) {
+				if ( $request->get_param( 'payment_method' ) !== null ) {
+					$chosen_payment_method = sanitize_text_field( $request->get_param( 'payment_method' ) );
+					// Retrieve the selected payment methods from the rcfwc_selected_payment_methods option
+					$selected_payment_methods = get_option('rcfwc_selected_payment_methods', array());
+					if(is_array($selected_payment_methods)) {
+						// Check if the chosen payment method is in the selected payment methods array
+						if ( in_array( $chosen_payment_method, $selected_payment_methods, true ) ) {
+							return $order;
+						}
+					}
+				}
+
+				// Check if guest only enabled
+				$guest = esc_attr( get_option('rcfwc_guest_only') );
+				if ( !$guest || ( $guest && !is_user_logged_in() ) ) {	
+					$extensions = $request->get_param( 'extensions' );
+					if ( empty( $extensions ) ) {
+						throw new \Exception( __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ));
+					}
+					$value = $extensions[ 'rcfwc' ];
+					if ( empty( $value ) ) {
+						throw new \Exception( __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ));
+					}
+					$token = $value['token'];
+					$check = rcfwc_recaptcha_check($token);
+					$success = $check['success'];
+					if ( !$success ) {
+						throw new \Exception( __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ));
+					}
+				}
+			}
+			return $order;	
+		}
   	}
 
   	// Woo Login

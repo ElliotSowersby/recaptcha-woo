@@ -12,3 +12,21 @@ jQuery( document ).ready(function() {
         }
     });
 });
+
+/* Woo Checkout Block */
+if ( wp && wp.data ) {
+    var unsubscribe = wp.data.subscribe(function() {
+        const recaptcha = document.querySelector('.g-recaptcha');
+        if(recaptcha) {
+            grecaptcha.render(recaptcha, {
+                sitekey: recaptcha.dataset.sitekey,
+                callback: function(data) {
+                    wp.data.dispatch('wc/store/checkout').__internalSetExtensionData('rcfwc', {
+                        token: data
+                    })
+                }
+            });
+        }
+        unsubscribe();
+    }, 'wc/store/cart');
+}
