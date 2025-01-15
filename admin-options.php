@@ -349,9 +349,9 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 
     </div>
 
-	<br/><br/>
+	<br/>
 
-    <div class="rfw-admin-promo" style="background: #f9f9f9; border: 1px solid #e5e5e5; border-radius: 10px; padding: 15px 25px; display: inline-block;">
+    <div class="rfw-admin-promo">
 
 		<p style="font-size: 15px; font-weight: bold;"><?php echo __( 'Check out our other plugins:', 'recaptcha-woo' ); ?></p>
 
@@ -367,7 +367,7 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 
 		<p style="font-size: 15px;">- <a href="https://relywp.com/plugins/ai-text-to-speech/?utm_campaign=recaptcha-woo-plugin&utm_source=plugin-settings&utm_medium=promo" target="_blank"><?php echo __( 'AI Text to Speech', 'recaptcha-woo' ); ?></a> - <?php echo __( 'Generate and display an AI audio version of your posts.', 'recaptcha-woo' ); ?></p>
 
-	</div>
+	<br/><br/><br/>
 
 </form>
 </div>

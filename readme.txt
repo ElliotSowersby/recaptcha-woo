@@ -4,7 +4,7 @@ Tags: recaptcha,woocommerce,checkout,spam,protect
 Donate link: https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS
 Requires at least: 4.7
 Tested up to: 6.7.1
-Stable Tag: 1.3.6
+Stable Tag: 1.4.1
 License: GPLv3 or later.
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -20,7 +20,7 @@ You can currently enable the reCAPTCHA on the following forms:
 
 **WooCommerce**
 
-* Checkout
+* Checkout (Shortcode & Block)
 * Login Form
 * Registration Form
 * Password Reset Form
@@ -67,6 +67,14 @@ Want a user-friendly, privacy-preserving reCAPTCHA alternative? Check out the <a
 2. Example reCAPTCHA on the Checkout Page
 
 == Changelog ==
+
+= Version 1.4.1 - 15th January 2025 =
+- Fix: Fixed an issue with saving the "Load scripts on all pages?" option.
+
+= Version 1.4.0 - 17th December 2024 =
+- New: Added Checkout block and Store API support. (Thanks [@senadir](https://github.com/senadir))
+- Fix: Fixed an issue with reCAPTCHA re-rendering when it does not need to in some cases, on WooCommerce checkout.
+- Other: Tested with WooCommerce 9.4.3
 
 = Version 1.3.6 - 29th November 2024 =
 - Fix: Fixed an issue with saving the "Load scripts on all pages?" option.
