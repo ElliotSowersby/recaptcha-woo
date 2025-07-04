@@ -24,6 +24,7 @@ function register_rcfwc_settings() {
   register_setting( 'rcfwc-settings-group', 'rcfwc_reset' );
   register_setting( 'rcfwc-settings-group', 'rcfwc_woo_checkout' );
   register_setting( 'rcfwc-settings-group', 'rcfwc_guest_only' );
+  register_setting( 'rcfwc-settings-group', 'rcfwc_woo_my_account_payment_page' );
   register_setting( 'rcfwc-settings-group', 'rcfwc_woo_login' );
   register_setting( 'rcfwc-settings-group', 'rcfwc_woo_register' );
   register_setting( 'rcfwc-settings-group', 'rcfwc_woo_reset' );
@@ -233,6 +234,13 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
 				<br/><br/>
 				<input type="checkbox" name="rcfwc_guest_only" <?php if(get_option('rcfwc_guest_only')) { ?>checked<?php } ?>>
 			</td>
+    </tr>
+
+		<tr valign="top" <?php if ( !class_exists( 'WooCommerce' ) ) { ?>style="opacity: 0.5; pointer-events: none;"<?php } ?>>
+			<th scope="row">
+			<?php echo __( 'WooCommerce My Account Payment Page', 'recaptcha-woo' ); ?>
+			</th>
+			<td><input type="checkbox" name="rcfwc_woo_my_account_payment_page" <?php if(get_option('rcfwc_woo_my_account_payment_page')) { ?>checked<?php } ?>></td>
     </tr>
 
 	<tr valign="top" <?php if ( !class_exists( 'WooCommerce' ) ) { ?>style="opacity: 0.5; pointer-events: none;"<?php } ?>>
