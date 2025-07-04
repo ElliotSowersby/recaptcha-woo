@@ -133,21 +133,31 @@ if(empty(get_option('rcfwc_tested')) || get_option('rcfwc_tested') != 'yes') {
     <tr valign="top">
     	<th scope="row" style="padding-bottom: 0;">
     	<p style="font-size: 19px; margin-top: 0;"><?php echo __( 'API Key Settings:', 'recaptcha-woo' ); ?></p>
-    	<p style="margin-bottom: 2px;"><?php echo __( 'You can get your site key and secret from here:', 'recaptcha-woo' ); ?> <a href="https://www.google.com/recaptcha/admin/create" target="_blank">https://www.google.com/recaptcha/admin/create</a></p>
-    	</th>
+
+    	<p style="margin-bottom: 2px;"><?php echo __( 'You can get your reCAPTCHA keys here:', 'recaptcha-woo' ); ?> <a href="https://www.google.com/recaptcha/admin/create" target="_blank">https://www.google.com/recaptcha/admin/create</a></p>
+		
+		<p>
+			<?php echo __( 'Currently reCAPTCHA v2 ("challenge") is the only version supported with this plugin.', 'recaptcha-woo' ); ?>
+		</p>
+		<p>
+			<?php echo __( 'When creating your API key you will need to enable the "Challenge v2" or "Will you use challenges?" option.', 'recaptcha-woo' ); ?>
+		</p>
+	</th>
     </tr>
+
+
 
     </table>
 
     <table class="form-table">
 
         <tr valign="top">
-        <th scope="row"><?php echo __( 'Site Key', 'recaptcha-woo' ); ?> (v2)</th>
+        <th scope="row"><?php echo __( 'Site Key / ID', 'recaptcha-woo' ); ?></th>
         <td><input type="text" name="rcfwc_key" value="<?php echo esc_attr( get_option('rcfwc_key') ); ?>" /></td>
         </tr>
 
         <tr valign="top">
-        <th scope="row"><?php echo __( 'Site Secret', 'recaptcha-woo' ); ?> (v2)</th>
+        <th scope="row"><?php echo __( 'Legacy reCAPTCHA secret key ', 'recaptcha-woo' ); ?></th>
         <td><input type="text" name="rcfwc_secret" value="<?php echo esc_attr( get_option('rcfwc_secret') ); ?>" /></td>
         </tr>
 

@@ -2,14 +2,14 @@
 /**
 * Plugin Name: reCAPTCHA for WooCommerce
 * Description: Add Google reCAPTCHA to your WooCommerce Checkout, Login, and Registration Forms.
-* Version: 1.4.1
+* Version: 1.4.2
 * Author: Elliot Sowersby, RelyWP
 * Author URI: https://www.relywp.com
 * License: GPLv3 or later
 * Text Domain: recaptcha-woo
 *
 * WC requires at least: 3.4
-* WC tested up to: 9.4.3
+* WC tested up to: 9.9.5
 **/
 
 include( plugin_dir_path( __FILE__ ) . 'admin-options.php');
@@ -301,23 +301,25 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
 		}
   		add_action('woocommerce_checkout_process', 'rcfwc_checkout_check');
 		add_action('woocommerce_store_api_checkout_update_order_from_request', 'rcfwc_checkout_block_check', 10, 2);
-		add_action('woocommerce_loaded', 'rcfwc_register_endpoint_data');
+		add_action('woocommerce_blocks_loaded', 'rcfwc_register_endpoint_data');
 		function rcfwc_register_endpoint_data() {
-			woocommerce_store_api_register_endpoint_data(
-				array(
-					'endpoint'        => 'checkout',
-				'namespace'       => 'rcfwc',
-				'schema_callback' => function() {
-					return array(
-						'token' => array(
-							'description' => __( 'reCaptcha token.', 'recaptcha-woo' ),
-							'type'        => 'string',
-							'context'     => array()
-						),
-					);
-				},
-				)
-			);
+			if (function_exists('woocommerce_store_api_register_endpoint_data')) {
+				woocommerce_store_api_register_endpoint_data(
+					array(
+						'endpoint'        => 'checkout',
+						'namespace'       => 'rcfwc',
+						'schema_callback' => function() {
+							return array(
+								'token' => array(
+									'description' => __( 'reCaptcha token.', 'recaptcha-woo' ),
+									'type'        => 'string',
+									'readonly'    => false,
+								),
+							);
+						},
+					)
+				);
+			}
 		}
   		function rcfwc_checkout_check() {
 			// Skip if reCAPTCHA disabled for payment method
@@ -422,6 +424,9 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
   		add_action('woocommerce_lostpassword_form','rcfwc_field');
   		add_action('lostpassword_post','rcfwc_woo_reset_check', 10, 1);
   		function rcfwc_woo_reset_check($validation_errors) {
+			if(stripos($_SERVER["REQUEST_URI"], strrchr(wp_login_url(), '/')) !== false) { // Check if WP login page
+				return $validation_errors;
+			}
   			if(isset($_POST['woocommerce-lost-password-nonce'])) {
   				$check = rcfwc_recaptcha_check();
   				$success = $check['success'];
