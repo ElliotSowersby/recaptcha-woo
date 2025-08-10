@@ -4,11 +4,11 @@ Tags: recaptcha,woocommerce,checkout,spam,protect
 Donate link: https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS
 Requires at least: 4.7
 Tested up to: 6.8
-Stable Tag: 1.4.2
+Stable Tag: 1.4.3
 License: GPLv3 or later.
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Add Google reCAPTCHA to your WooCommerce Checkout, Login, and Registration Forms.
+Add Google reCAPTCHA to your WooCommerce Checkout, Login, and Registration Forms. 100% free!
 
 == Description ==
 
@@ -61,12 +61,25 @@ Want a user-friendly, privacy-preserving reCAPTCHA alternative? Check out the <a
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Customise plugin settings in WordPress admin at Settings > reCAPTCHA WooCommerce
 
+== Frequently Asked Questions ==
+
+= How do I get my reCAPTCHA keys? =
+
+You can get your reCAPTCHA keys by visiting the <a href="https://www.google.com/recaptcha/admin/create">Google reCAPTCHA admin page</a>. You will need to register your site and select the reCAPTCHA v2 option. Once registered, you will be given a site key and secret key to use in the plugin settings.
+
+= How can I report security bugs? =
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team helps validate, triage and handle any security vulnerabilities. [Report a security vulnerability.]( https://patchstack.com/database/vdp/8d301427-508b-42fe-a2e4-672be03889c3 )
+
 == Screenshots ==
 
 1. Example reCAPTCHA on the My Account Page
 2. Example reCAPTCHA on the Checkout Page
 
 == Changelog ==
+
+= Version 1.4.3 - 4th July 2025 =
+- Tweak: Made some changes to the admin settings page design.
 
 = Version 1.4.2 - 4th July 2025 =
 - Fix: Fixed an issue with the reCAPTCHA not working on block checkout in some cases.
