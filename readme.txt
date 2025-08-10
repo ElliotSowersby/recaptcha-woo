@@ -4,7 +4,7 @@ Tags: recaptcha,woocommerce,checkout,spam,protect
 Donate link: https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS
 Requires at least: 4.7
 Tested up to: 6.8
-Stable Tag: 1.4.3
+Stable Tag: 1.4.4
 License: GPLv3 or later.
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -78,7 +78,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= Version 1.4.3 - 4th July 2025 =
+= Version 1.4.4 - 10th August 2025 =
+- Tweak: Changed some of the code on the admin settings page.
+
+= Version 1.4.3 - 10th August 2025 =
 - Tweak: Made some changes to the admin settings page design.
 
 = Version 1.4.2 - 4th July 2025 =

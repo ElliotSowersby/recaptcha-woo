@@ -1,0 +1,51 @@
+.rcfwc-modern-wrap {background:#f9fafb;min-height:100vh;margin:0 -20px -20px -20px;padding:20px;}
+.rcfwc-container {max-width:1200px;margin:0 auto;}
+.rcfwc-header {margin:40px 0;}
+.rcfwc-header h1 {margin:0 0 20px;font-size:2.5rem;font-weight:700;color:#000;}
+.rcfwc-header p {margin:0;font-size:1.1rem;opacity:.9;}
+.rcfwc-quick-links {background:#fff;padding:20px;border-radius:12px;margin-bottom:30px;box-shadow:0 2px 4px rgba(0,0,0,.05);border:1px solid #e5e7eb;}
+.rcfwc-quick-links .links-grid {display:flex;gap:20px;flex-wrap:wrap;align-items:center;}
+.rcfwc-quick-links a {text-decoration:none;}
+.rcfwc-quick-links .dashicons {margin-left:4px;font-size:14px;}
+.rcfwc-settings-grid {display:grid;grid-template-columns:1fr;gap:30px;}
+@media (min-width:1024px){.rcfwc-settings-grid{grid-template-columns:2fr 1fr;}}
+.rcfwc-card {background:#fff;border-radius:12px;box-shadow:0 2px 4px rgba(0,0,0,.05);border:1px solid #e5e7eb;overflow:hidden;margin-bottom:20px;}
+.rcfwc-card-header {background:#f8fafc;padding:20px;border-bottom:1px solid #e5e7eb;}
+.rcfwc-card-header h2 {margin:0;font-size:1.25rem;font-weight:600;color:#1f2937;}
+.rcfwc-card-content {padding:20px;}
+.rcfwc-form-group {margin-bottom:20px;}
+.rcfwc-form-group:last-child {margin-bottom:0;}
+.rcfwc-form-label {display:block;font-weight:600;color:#374151;margin-bottom:6px;}
+.rcfwc-form-input,
+.rcfwc-form-select,
+.rcfwc-main-settings input[type="text"],
+.rcfwc-main-settings select {width:100%;padding:10px 14px;border:2px solid #e5e7eb;border-radius:8px;font-size:14px;transition:border-color .2s;}
+.rcfwc-form-input:focus,
+.rcfwc-form-select:focus,
+.rcfwc-main-settings input[type="text"]:focus,
+.rcfwc-main-settings select:focus {outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1);}
+.rcfwc-form-select {background:#fff;}
+.rcfwc-checkbox-group {display:flex;align-items:center;gap:8px;}
+.rcfwc-checkbox {width:18px;height:18px;border:2px solid #e5e7eb;border-radius:4px;transition:all .2s;}
+.rcfwc-checkbox:checked {background:#adf0ff;border-color:#38bdf8;}
+.rcfwc-section-divider {border:none;height:1px;background:linear-gradient(to right,transparent,#e5e7eb,transparent);margin:30px 0;}
+.rcfwc-status-success {background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;padding:12px 16px;border-radius:8px;margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+.rcfwc-status-success .dashicons {color:#10b981;}
+.rcfwc-submit-btn {background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;padding:12px 24px;border-radius:8px;font-weight:600;cursor:pointer;transition:all .2s;box-shadow:0 2px 4px rgba(0,0,0,.1);}
+.rcfwc-submit-btn:hover {transform:translateY(-1px);box-shadow:0 4px 8px rgba(0,0,0,.15);}
+.rcfwc-sidebar {display:flex;flex-direction:column;gap:20px;}
+.rcfwc-info-card {background:#fff;padding:20px;border-radius:12px;border:1px solid #e5e7eb;box-shadow:0 2px 4px rgba(0,0,0,.05);}
+.rcfwc-info-card h3 {margin:0 0 15px;color:#1f2937;font-size:1.1rem;font-weight:600;}
+.rcfwc-info-card ul {margin:0;padding:0;list-style:none;}
+.rcfwc-info-card li {margin-bottom:8px;padding-left:20px;position:relative;}
+.rcfwc-info-card li:before {content:"→";position:absolute;left:0;color:#667eea;font-weight:700;}
+.rcfwc-info-card a {color:#667eea;text-decoration:none;font-weight:500;}
+.rcfwc-info-card a:hover {text-decoration:underline;}
+.rcfwc-toggle-section {border:1px solid #e5e7eb;border-radius:8px;margin:20px 0;}
+.rcfwc-toggle-header {background:#f8fafc;padding:15px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-weight:600;transition:background-color .2s;}
+.rcfwc-toggle-header:hover {background:#f1f5f9;}
+.rcfwc-toggle-content {padding:20px;border-top:1px solid #e5e7eb;}
+.rcfwc-payment-methods {display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:15px;}
+.rcfwc-payment-method {display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;border-radius:6px;background:#f9fafb;}
+.rcfwc-help-text {font-size:.875rem;color:#6b7280;margin-top:5px;}
+.rcfwc-test-response-box {background:#fff;padding:20px;border-radius:8px;margin-bottom:20px;border:1px solid #e5e7eb;}
