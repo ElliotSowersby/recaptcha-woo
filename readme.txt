@@ -4,7 +4,7 @@ Tags: recaptcha,woocommerce,checkout,spam,protect
 Donate link: https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS
 Requires at least: 4.7
 Tested up to: 6.8
-Stable Tag: 1.4.4
+Stable Tag: 1.4.5
 License: GPLv3 or later.
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -77,6 +77,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 2. Example reCAPTCHA on the Checkout Page
 
 == Changelog ==
+
+= Version 1.4.5 - 10th August 2025 =
+- Fix: Fix "Incorrect call of JavaScript resource parameter" error.
 
 = Version 1.4.4 - 10th August 2025 =
 - Tweak: Changed some of the code on the admin settings page.
