@@ -409,7 +409,7 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
   		add_action('woocommerce_register_form','rcfwc_field');
   		add_action('woocommerce_register_post', 'rcfwc_woo_register_check', 10, 3);
   		function rcfwc_woo_register_check($username, $email, $validation_errors) {
-  			if(!is_checkout()) {
+  			if(!is_checkout() && !is_admin()) {
   				$check = rcfwc_recaptcha_check();
   				$success = $check['success'];
   				if($success != true) {
