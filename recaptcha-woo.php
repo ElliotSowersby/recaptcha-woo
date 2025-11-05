@@ -2,7 +2,7 @@
 /**
 * Plugin Name: reCAPTCHA for WooCommerce
 * Description: Add Google reCAPTCHA to your WooCommerce Checkout, Login, and Registration Forms.
-* Version: 1.4.5
+* Version: 1.4.6
 * Author: Elliot Sowersby, RelyWP
 * Author URI: https://www.relywp.com
 * License: GPLv3 or later
@@ -130,7 +130,14 @@ function rcfwc_field_checkout_block() {
 	<?php if ( !$guest || ( $guest && !is_user_logged_in() ) ) {
 		if($key && $secret) {
 			?>
-			<div class="g-recaptcha" <?php if($theme == "dark") { ?>data-theme="dark" <?php } ?>data-sitekey="<?php echo $key; ?>"></div>
+			<div
+				class="g-recaptcha"
+				id="g-recaptcha-woo-checkout"
+				<?php if($theme == "dark") { ?>data-theme="dark" <?php } ?>
+				data-sitekey="<?php echo $key; ?>"
+				data-callback="rcfwcRecaptchaCallback"
+				data-expired-callback="rcfwcRecaptchaExpired"
+			></div>
 			<br/>
 			<?php
 		}
@@ -391,8 +398,14 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
   		add_action('woocommerce_login_form','rcfwc_field');
   		add_action('authenticate', 'rcfwc_woo_login_check', 21, 1);
   		function rcfwc_woo_login_check($user){
+
+			// Check skip
+			if(!isset($user->ID)) { return $user; }
+			if(!isset($_POST['woocommerce-login-nonce'])) { return $user; } // Skip if not WooCommerce login
 			if(defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST) { return $user; } // Skip XMLRPC
 			if(defined( 'REST_REQUEST' ) && REST_REQUEST) { return $user; } // Skip REST API
+
+			// Check
   			if(isset($_POST['woocommerce-login-nonce'])) {
   				$check = rcfwc_recaptcha_check();
   				$success = $check['success'];
@@ -409,6 +422,8 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
   		add_action('woocommerce_register_form','rcfwc_field');
   		add_action('woocommerce_register_post', 'rcfwc_woo_register_check', 10, 3);
   		function rcfwc_woo_register_check($username, $email, $validation_errors) {
+			if(defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST) { return; } // Skip XMLRPC
+			if(defined( 'REST_REQUEST' ) && REST_REQUEST) { return; } // Skip REST API
   			if(!is_checkout()) {
   				$check = rcfwc_recaptcha_check();
   				$success = $check['success'];

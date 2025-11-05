@@ -4,7 +4,7 @@ Tags: recaptcha,woocommerce,checkout,spam,protect
 Donate link: https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS
 Requires at least: 4.7
 Tested up to: 6.8
-Stable Tag: 1.4.5
+Stable Tag: 1.4.6
 License: GPLv3 or later.
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -77,6 +77,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 2. Example reCAPTCHA on the Checkout Page
 
 == Changelog ==
+
+= Version 1.4.6 - 5th November 2025 =
+- Tweak: Added skip for XMLRPC and REST API on WooCommerce login and register check.
+- Fix: Fixed an issue with reCAPTCHA on block checkout.
+- Fix: Fixed an issue on checkout when register an account is selected.
 
 = Version 1.4.5 - 10th August 2025 =
 - Fix: Fix "Incorrect call of JavaScript resource parameter" error.

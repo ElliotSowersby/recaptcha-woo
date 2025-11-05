@@ -14,78 +14,50 @@ jQuery( document ).ready(function() {
 });
 
 /* Woo Checkout Block */
-if ( wp && wp.data ) {
-    let isRecaptchaRendered = false;
-    let recaptchaWidgetId = null;
-    let hasValidToken = false;
-    
-    const renderRecaptcha = function() {
-        const recaptcha = document.querySelector('.g-recaptcha:not([data-rendered])');
-        if (recaptcha && typeof grecaptcha !== 'undefined' && !isRecaptchaRendered) {
+(function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        // Global callbacks used by auto-rendered v2 widgets in the block checkout
+        window.rcfwcRecaptchaCallback = function(token) {
             try {
-                recaptchaWidgetId = grecaptcha.render(recaptcha, {
-                    sitekey: recaptcha.dataset.sitekey,
-                    theme: recaptcha.dataset.theme || 'light',
-                    callback: function(token) {
-                        hasValidToken = true;
-                        wp.data.dispatch('wc/store/checkout').__internalSetExtensionData('rcfwc', {
-                            token: token
-                        });
-                    },
-                    'expired-callback': function() {
-                        hasValidToken = false;
-                        wp.data.dispatch('wc/store/checkout').__internalSetExtensionData('rcfwc', {
-                            token: ''
-                        });
-                    }
-                });
-                recaptcha.setAttribute('data-rendered', 'true');
-                isRecaptchaRendered = true;
-            } catch (error) {
-                console.log('reCAPTCHA render error:', error);
-            }
-        }
-    };
-
-    // Wait for grecaptcha to be available
-    const waitForRecaptcha = function() {
-        if (typeof grecaptcha !== 'undefined' && grecaptcha.render) {
-            renderRecaptcha();
-        } else {
-            setTimeout(waitForRecaptcha, 100);
-        }
-    };
-
-    // Subscribe to checkout updates - only for initial rendering
-    let hasSubscribed = false;
-    const unsubscribe = wp.data.subscribe(function() {
-        if (!hasSubscribed) {
-            const checkoutData = wp.data.select('wc/store/checkout');
-            if (checkoutData && document.querySelector('.g-recaptcha')) {
-                waitForRecaptcha();
-                hasSubscribed = true;
-                unsubscribe();
-            }
-        }
-    });
-
-    // Also try to render on DOM changes
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.type === 'childList') {
-                const recaptcha = document.querySelector('.g-recaptcha:not([data-rendered])');
-                if (recaptcha) {
-                    waitForRecaptcha();
+                if (typeof wp !== 'undefined' && wp.data) {
+                    wp.data.dispatch('wc/store/checkout').__internalSetExtensionData('rcfwc', { token: token });
                 }
-            }
-        });
-    });
+            } catch (e) {}
+        };
+        window.rcfwcRecaptchaExpired = function() {
+            try {
+                if (typeof wp !== 'undefined' && wp.data) {
+                    wp.data.dispatch('wc/store/checkout').__internalSetExtensionData('rcfwc', { token: '' });
+                }
+            } catch (e) {}
+        };
 
-    // Start observing when checkout block is present
-    if (document.querySelector('.wp-block-woocommerce-checkout')) {
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
-    }
-}
+        // Try to render explicitly if needed once the blocks mount/update
+        if (typeof wp !== 'undefined' && wp.data) {
+            var unsubscribe = wp.data.subscribe(function() {
+                var el = document.getElementById('g-recaptcha-woo-checkout');
+                if (!el) {
+                    return;
+                }
+                // If already rendered (has inner HTML/iframe), stop listening
+                if (el.innerHTML && el.innerHTML.trim() !== '') {
+                    unsubscribe && unsubscribe();
+                    return;
+                }
+                // Render explicitly with callbacks if the API is ready
+                if (typeof grecaptcha !== 'undefined' && typeof grecaptcha.render === 'function') {
+                    try {
+                        grecaptcha.render(el, {
+                            sitekey: el.getAttribute('data-sitekey'),
+                            callback: rcfwcRecaptchaCallback,
+                            'expired-callback': rcfwcRecaptchaExpired
+                        });
+                    } catch (e) {
+                        // Ignore if already rendered or API not ready
+                    }
+                    unsubscribe && unsubscribe();
+                }
+            }, 'wc/store/cart');
+        }
+    });
+})();
