@@ -45,7 +45,7 @@ function rcfwc_keys_updated() {
 function rcfwc_admin_script_enqueue( $hook ) {
 	// Only load on this plugin settings page
 	if ( isset( $_GET['page'] ) && $_GET['page'] === 'recaptcha-woo/admin-options.php' ) {
-		wp_register_script( 'recaptcha', 'https://www.google.com/recaptcha/api.js?hl=' . get_locale() );
+		wp_register_script( 'recaptcha', 'https://www.google.com/recaptcha/api.js?render=explicit&hl=' . get_locale() );
 		wp_enqueue_script( 'recaptcha' );
 		wp_enqueue_style( 'rcfwc-admin', plugins_url( 'css/admin.css', __FILE__ ), array(), '1.4.3' );
 	}
