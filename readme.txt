@@ -4,7 +4,7 @@ Tags: recaptcha,woocommerce,checkout,spam,protect
 Donate link: https://www.paypal.com/donate/?hosted_button_id=RX28BBH7L5XDS
 Requires at least: 4.7
 Tested up to: 6.8
-Stable Tag: 1.4.6
+Stable Tag: 1.4.7
 License: GPLv3 or later.
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -77,6 +77,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 2. Example reCAPTCHA on the Checkout Page
 
 == Changelog ==
+
+= Version 1.4.7 - 5th November 2025 =
+- Fix: Fixed an issue with some express payment methods. These will now automatically skip the reCAPTCHA check preventing the error message from showing.
 
 = Version 1.4.6 - 5th November 2025 =
 - Tweak: Added skip for XMLRPC and REST API on WooCommerce login and register check.

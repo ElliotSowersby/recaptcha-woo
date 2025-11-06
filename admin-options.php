@@ -284,6 +284,19 @@ function rcfwc_settings_page() {
 												<?php endforeach; ?>
 												</div>
 											<?php } ?>
+
+                                            <?php
+                                            // Visual-only WooPayments Express indicators (not saved).
+                                            $wcpay_active   = function_exists('cft_is_plugin_active') ? cft_is_plugin_active('woocommerce-payments/woocommerce-payments.php') : false;
+                                            $wcstripe_active = function_exists('cft_is_plugin_active') ? cft_is_plugin_active('woocommerce-gateway-stripe/woocommerce-gateway-stripe.php') : false;
+                                            if ( $wcpay_active || $wcstripe_active ) { ?>
+                                            ?>
+                                            <br/>
+                                            <p class="rcfwc-help-text">
+                                                <?php echo esc_html__('Note: Currently reCAPTCHA is not able to perform spam checks for some "Express Checkout" payment methods (e.g. PayPal, Google Pay, Apple Pay, Amazon Pay) and will skip them automatically.', 'recaptcha-woo'); ?>
+                                            </p>
+                                            <?php } ?>
+
 										</div>
 									</div>
 

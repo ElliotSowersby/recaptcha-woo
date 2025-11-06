@@ -2,7 +2,7 @@
 /**
 * Plugin Name: reCAPTCHA for WooCommerce
 * Description: Add Google reCAPTCHA to your WooCommerce Checkout, Login, and Registration Forms.
-* Version: 1.4.6
+* Version: 1.4.7
 * Author: Elliot Sowersby, RelyWP
 * Author URI: https://www.relywp.com
 * License: GPLv3 or later
@@ -355,9 +355,9 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
   		}
 
 		function rcfwc_checkout_block_check($order, $request) {
-			// Skip if reCAPTCHA disabled for payment method
-			$skip = 0;
+
 			if ( $request->get_method() === 'POST' ) {
+
 				if ( $request->get_param( 'payment_method' ) !== null ) {
 					$chosen_payment_method = sanitize_text_field( $request->get_param( 'payment_method' ) );
 					// Retrieve the selected payment methods from the rcfwc_selected_payment_methods option
@@ -367,6 +367,27 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
 						if ( in_array( $chosen_payment_method, $selected_payment_methods, true ) ) {
 							return $order;
 						}
+					}
+				}
+
+				// Additional skip: WooPayments Express or Stripe Express (Apple Pay / Google Pay / Link) on block checkout.
+				$payment_method = $request->get_param( 'payment_method' );
+				$payment_data   = $request->get_param( 'payment_data' );
+				if ( is_array( $payment_data ) ) {
+					foreach ( $payment_data as $pd_item ) {
+						if ( is_array( $pd_item ) && isset( $pd_item['key'] ) ) {
+							$key   = $pd_item['key'];
+							$value = isset( $pd_item['value'] ) ? $pd_item['value'] : '';
+							if ( in_array( $key, array( 'express_payment_type', 'payment_request_type' ), true ) && ! empty( $value ) ) {
+								$express_detected = true;
+								break;
+							}
+						}
+					}
+					// Allow customization via filter, defaults to skip when WooPayments or Stripe express is detected.
+					$skip_on_express = apply_filters( 'recaptcha_skip_on_express_pay', ( ($payment_method === 'woocommerce_payments' || $payment_method === 'stripe') && $express_detected ), $payment_method, $payment_data, $request );
+					if ( $skip_on_express ) {
+						return $order;
 					}
 				}
 
@@ -388,8 +409,11 @@ if(!empty(get_option('rcfwc_key')) && !empty(get_option('rcfwc_secret'))) {
 						throw new \Exception( __( 'Please complete the reCAPTCHA to verify that you are not a robot.', 'recaptcha-woo' ));
 					}
 				}
+				
 			}
-			return $order;	
+			
+			return $order;
+
 		}
   	}
 
